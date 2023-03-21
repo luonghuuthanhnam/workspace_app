@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'antd';
 import { type } from '@testing-library/user-event/dist/type';
-import { Space, Table, Tag, Button, Row, Col, Spin } from 'antd';
+import { Space, Table, Tag, Button, Row, Col, Spin, Popconfirm} from 'antd';
 import EventContent from './event_content';
 
 const { Meta } = Card;

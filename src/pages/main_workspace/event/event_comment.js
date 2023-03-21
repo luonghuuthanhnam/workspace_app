@@ -14,7 +14,7 @@ const CommentList = ({ comments }) => (
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
     <>
         <Form.Item>
-            <TextArea rows={4} onChange={onChange} value={value} />
+            <TextArea rows={4} onChange={onChange} value={value}/>
         </Form.Item>
         <Form.Item>
             <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
@@ -39,7 +39,7 @@ const EventComment = () => {
                     author: 'Lương Nam',
                     //   avatar: 'https://joeschmoe.io/api/v1/random',
                     content: <p>{value}</p>,
-                    datetime: moment('2016-11-22').fromNow(),
+                    datetime: moment().fromNow(),
                 },
             ]);
         }, 1000);

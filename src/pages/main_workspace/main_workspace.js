@@ -58,11 +58,11 @@ function MainWorkSpace() {
       getItem('Table', '31'),
       getItem('Chart', '32'),
     ]),
-    getItem('Team', '4', <TeamOutlined />, [
-      getItem('Sơn', '41'),
-      getItem('Luân', '42'),
-      getItem('Nam', '43')
-    ]),
+    // getItem('Team', '4', <TeamOutlined />, [
+    //   getItem('Sơn', '41'),
+    //   getItem('Luân', '42'),
+    //   getItem('Nam', '43')
+    // ]),
     // getItem('Files', '9', <FileOutlined />),
   ];
 

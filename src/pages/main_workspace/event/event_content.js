@@ -4,9 +4,11 @@ import React from 'react';
 import EventComment from './event_comment';
 
 const confirm = () => {
-    message.info('Clicked on Yes.');
+    message.info('Added to Joined event list');
   };
-
+const reject = () => {
+    message.info('Added to Reject event list');
+  };
 const EventContent = ({ event_data }) => {
     console.log("event_data", event_data)
 
@@ -41,7 +43,7 @@ const EventContent = ({ event_data }) => {
                         <Col span={4} style={{ marginLeft: "1vw", alignItems: "center", display: "flex" }}>
                             <Popconfirm
                                 placement="topLeft"
-                                title="Joining?"
+                                title="Join?"
                                 description= "Confirm joining event"
                                 onConfirm={confirm}
                                 okText="Join"
@@ -51,13 +53,13 @@ const EventContent = ({ event_data }) => {
                             </Popconfirm>
                             <Popconfirm
                                 placement="topLeft"
-                                title="Joining?"
+                                title="Reject?"
                                 description= "Confirm joining event"
-                                onConfirm={confirm}
+                                onConfirm={reject}
                                 okText="Reject"
                                 cancelText="Cancel"
+                                okButtonProps={{ style: { backgroundColor: "#f50", color: "#fff" } }}
                             >
-
                             <Button type="dashed" size="medium" style={{ marginLeft: "10px", color: "#f50" }} danger>Reject</Button>
                             </Popconfirm>
                         </Col>
