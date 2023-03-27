@@ -1,14 +1,14 @@
-import { Space, Table, Tag, Button, Row, Col, Divider, Popconfirm, message} from 'antd';
+import { Space, Table, Tag, Button, Row, Col, Divider, Popconfirm, message } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import React from 'react';
 import EventComment from './event_comment';
 
 const confirm = () => {
     message.info('Added to Joined event list');
-  };
+};
 const reject = () => {
     message.info('Added to Reject event list');
-  };
+};
 const EventContent = ({ event_data }) => {
     console.log("event_data", event_data)
 
@@ -44,7 +44,7 @@ const EventContent = ({ event_data }) => {
                             <Popconfirm
                                 placement="topLeft"
                                 title="Join?"
-                                description= "Confirm joining event"
+                                description="Confirm joining event"
                                 onConfirm={confirm}
                                 okText="Join"
                                 cancelText="Cancel"
@@ -54,13 +54,13 @@ const EventContent = ({ event_data }) => {
                             <Popconfirm
                                 placement="topLeft"
                                 title="Reject?"
-                                description= "Confirm joining event"
+                                description="Confirm joining event"
                                 onConfirm={reject}
                                 okText="Reject"
                                 cancelText="Cancel"
                                 okButtonProps={{ style: { backgroundColor: "#f50", color: "#fff" } }}
                             >
-                            <Button type="dashed" size="medium" style={{ marginLeft: "10px", color: "#f50" }} danger>Reject</Button>
+                                <Button type="dashed" size="medium" style={{ marginLeft: "10px", color: "#f50" }} danger>Reject</Button>
                             </Popconfirm>
                         </Col>
                     </Row>

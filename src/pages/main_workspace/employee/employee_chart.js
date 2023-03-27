@@ -8,7 +8,7 @@ import JoiningByGenderChart from "./employee_joining_by_gender_chart";
 import AgeDistributionChart from "./employee_age_line_chart";
 import ProvinceDistributionChart from "./employee_province_distribution";
 
-const baseURL = "http://localhost:8000";
+const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
 
 const EmployeeChart = () => {
     const [received_data, setReceived_data] = React.useState(null);

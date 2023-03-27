@@ -8,6 +8,7 @@ import EmployeeChart from './employee/employee_chart';
 import JoinedEvent from './event/joined_event';
 import { useNavigate } from 'react-router-dom';
 import EventCardLayout from './event/event_card';
+import CreateEvent from './event/manager/create_event';
 const { Header, Content, Footer, Sider } = Layout;
 
 
@@ -29,6 +30,8 @@ function MainWorkSpace() {
 
 
   const userId = localStorage.getItem('userID');
+  const adminIds = ["19031998", "12345678", "87654321"]; // replace with your list of admin IDs
+  const isAdmin = adminIds.includes(userId);
   useEffect(() => {
     if (userId == null) {
       navigate('/login');
@@ -37,7 +40,7 @@ function MainWorkSpace() {
 
   console.log("message from mainworkspace:", userId)
   const [collapsed, setCollapsed] = useState(false);
-  const [selectedMenuItem, setSelectedMenuItem] = useState('1');
+  const [selectedMenuItem, setSelectedMenuItem] = useState('32');
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -51,6 +54,7 @@ function MainWorkSpace() {
       getItem('Joined', '11'),
       getItem('Pendding', '12'),
       getItem('Rejected', '13'),
+      // getItem('Create', '14'),
     ]
     ),
     // getItem('Project List', '2', <DesktopOutlined />),
@@ -58,13 +62,30 @@ function MainWorkSpace() {
       getItem('Table', '31'),
       getItem('Chart', '32'),
     ]),
-    // getItem('Team', '4', <TeamOutlined />, [
-    //   getItem('Sơn', '41'),
-    //   getItem('Luân', '42'),
-    //   getItem('Nam', '43')
+
+    // getItem('Event - Admin', '4', <UserOutlined />, [
+    //   getItem('Create Event', '41'),
+    //   getItem('Edit Event', '42'),
+    //   getItem('Remove Event', '43'),
+    //   getItem('Event Chart', '44'),
     // ]),
-    // getItem('Files', '9', <FileOutlined />),
   ];
+
+
+  if (isAdmin) {
+    items.push(
+      getItem('Event - Admin', '4', <UserOutlined />, [
+        getItem('Create Event', '41'),
+        getItem('Edit Event', '42'),
+        getItem('Remove Event', '43'),
+        getItem('Event Chart', '44'),
+      ])
+    );
+  }
+
+  function handleCreateEventSuccess() {
+    setSelectedMenuItem('32');
+  }
 
   return (
     <ConfigProvider
@@ -148,9 +169,10 @@ function MainWorkSpace() {
             >
               {selectedMenuItem === '31' && <EmployeeTable />}
               {selectedMenuItem === '32' && <EmployeeChart />}
-              {selectedMenuItem === '11' && <EventCardLayout event_state="Joined" userId = {userId}/>}
-              {selectedMenuItem === '12' && <EventCardLayout event_state="Pendding" userId = {userId}/>}
-              {selectedMenuItem === '13' && <EventCardLayout event_state="Rejected" userId = {userId}/>}
+              {selectedMenuItem === '11' && <EventCardLayout event_state="Joined" userId={userId} />}
+              {selectedMenuItem === '12' && <EventCardLayout event_state="Pendding" userId={userId} />}
+              {selectedMenuItem === '13' && <EventCardLayout event_state="Rejected" userId={userId} />}
+              {selectedMenuItem === '41' && <CreateEvent user_id={userId} onCreateEventSuccess={handleCreateEventSuccess}></CreateEvent>}
             </div>
           </Content>
           <Footer
