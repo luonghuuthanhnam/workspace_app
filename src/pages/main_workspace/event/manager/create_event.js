@@ -3,7 +3,9 @@ import { Input, DatePicker, Button, Form, Table, Row, Col, Modal, message, Popco
 import axios from 'axios';
 
 const { RangePicker } = DatePicker;
-const baseURL = "http://localhost:8000";
+// const baseURL = "http://localhost:8000";
+const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+
 const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     const [eventTitle, setEventTitle] = useState('');
     const [eventDates, setEventDates] = useState([]);
