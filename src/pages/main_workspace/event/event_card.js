@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'antd';
 import { type } from '@testing-library/user-event/dist/type';
-import { Space, Table, Tag, Button, Row, Col, Spin, Popconfirm} from 'antd';
+import { Space, Table, Tag, Button, Row, Col, Spin, Popconfirm } from 'antd';
 import EventContent from './event_content';
 
 const { Meta } = Card;
@@ -109,7 +109,7 @@ function EventCardLayout({ userId, event_state }) {
         </Col>
         <Col span={20} style={{ height: "74vh", paddingLeft: "2%" }}>
           {loading ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height:"100%"}}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "100%" }}>
               <Spin size="large" />
             </div>
           ) : (
