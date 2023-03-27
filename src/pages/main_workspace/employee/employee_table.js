@@ -4,7 +4,8 @@ import columns from './employee_columns';
 import axios from 'axios';
 import { Pie, measureTextWidth } from '@ant-design/plots';
 import EmployeePieChart from "./employee_pie";
-const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+const baseURL = localStorage.getItem('backed_baseURL');
 
 const EmployeeTable = () => {
   const [received_data, setReceived_data] = React.useState(null);

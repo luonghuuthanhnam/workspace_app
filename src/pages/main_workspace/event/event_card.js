@@ -5,7 +5,8 @@ import { Space, Table, Tag, Button, Row, Col, Spin, Popconfirm } from 'antd';
 import EventContent from './event_content';
 
 const { Meta } = Card;
-const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+const baseURL = localStorage.getItem('backed_baseURL');
 
 function CardList({ userId, event_state, onCardClick }) {
   const [events, setEvents] = useState([]);

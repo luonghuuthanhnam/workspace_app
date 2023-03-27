@@ -8,7 +8,8 @@ import JoiningByGenderChart from "../employee/employee_joining_by_gender_chart";
 import AgeDistributionChart from "../employee/employee_age_line_chart";
 import ProvinceDistributionChart from "../employee/employee_province_distribution";
 
-const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+const baseURL = localStorage.getItem('backed_baseURL');
 
 const JoinedEvent = () => {
     const [received_data, setReceived_data] = React.useState(null);

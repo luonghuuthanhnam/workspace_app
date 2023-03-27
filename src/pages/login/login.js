@@ -2,9 +2,8 @@ import { Row, Col, Input, Button } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const baseURL = localStorage.getItem('backed_baseURL');
 
-// const baseURL = "http://localhost:8000";
-const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/"
 function LoginPage({ onLogin }) {
   const navigate = useNavigate();
   const [email, setEmail] = React.useState('');

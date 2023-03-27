@@ -4,7 +4,8 @@ import axios from 'axios';
 
 const { RangePicker } = DatePicker;
 // const baseURL = "http://localhost:8000";
-const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
+const baseURL = localStorage.getItem('backed_baseURL');
 
 const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     const [eventTitle, setEventTitle] = useState('');
