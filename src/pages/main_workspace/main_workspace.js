@@ -85,7 +85,7 @@ function MainWorkSpace() {
   }
 
   function handleCreateEventSuccess() {
-    setSelectedMenuItem('32');
+    setSelectedMenuItem('11');
   }
 
   return (
