@@ -4,14 +4,15 @@ import { type } from '@testing-library/user-event/dist/type';
 import { Space, Table, Tag, Button, Row, Col, Spin, Popconfirm } from 'antd';
 import EventContent from '../event_content';
 import { json } from 'react-router-dom';
-
+import { baseURL } from '../../../../config';
 const { Meta } = Card;
-// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
-const baseURL = localStorage.getItem('backed_baseURL');
 
 function CardList({ userId, event_state, onCardClick }) {
     const [events, setEvents] = useState([]);
+    const [loading, setLoading] = React.useState(false); // Add loading state
+
     useEffect(() => {
+        setLoading(true);
         console.log(typeof (userId))
         let cur_data = null
         fetch(`${baseURL}/event/query`, {
@@ -22,20 +23,11 @@ function CardList({ userId, event_state, onCardClick }) {
         })
             .then((response) => response.json())
             .then((data) => {
-                // if (event_state == "Joined") {
-                //   cur_data = data.accepted_events
-                // }
-                // else if (event_state == "Pendding") {
-                //   cur_data = data.pending_events
-                // }
-                // else if (event_state == "Rejected") {
-                //   cur_data = data.rejected_events
-                // }
                 if (data.event_id) {
                     const eventIds = Object.values(data.event_id);  // Convert object to array
                     const newEvents = eventIds.map((event_id, index) => {
                         let e_data = data.event_data[index]
-                        if (typeof e_data === 'string'){
+                        if (typeof e_data === 'string') {
                             e_data = JSON.parse(e_data.replace(/'/g, '"'));
                         }
                         return {
@@ -53,6 +45,7 @@ function CardList({ userId, event_state, onCardClick }) {
                 } else {
                     console.log("error")
                 }
+                setLoading(false);
             })
             .catch((error) => {
                 console.error(error);
@@ -63,25 +56,31 @@ function CardList({ userId, event_state, onCardClick }) {
         onCardClick(event_data);
     }
     return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
-            {events.map(event => (
-                <Card
-                    key={event.title}
-                    hoverable
-                    // cover={<img alt={event.title} src={event.cover_img_link} style={{ height: '15vh' }} />}
-                    style={{ margin: '1rem', backgroundColor: "#A3D2CA", minHeight: "10vh", width: "80%" }}
-                    onClick={() => handleInCardClick(event)}
-                >
-                    <Meta
-                        title={<div style={{ flex: '1 0 auto' }}>{event.title}</div>}
-                        description={<div style={{ flex: '1', flexGrow: 1 }}>{event.from_date + " → " + event.to_date}</div>}
-                        style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-                    // src={event.cover_img_link} 
-                    />
-                </Card>
-            ))}
+        <>
+            <Spin spinning={loading}>
 
-        </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
+                    {events.map(event => (
+                        <Card
+                            key={event.title}
+                            hoverable
+                            // cover={<img alt={event.title} src={event.cover_img_link} style={{ height: '15vh' }} />}
+                            style={{ margin: '1rem', backgroundColor: "#A3D2CA", minHeight: "10vh", width: "80%" }}
+                            onClick={() => handleInCardClick(event)}
+                        >
+                            <Meta
+                                title={<div style={{ flex: '1 0 auto' }}>{event.title}</div>}
+                                description={<div style={{ flex: '1', flexGrow: 1 }}>{event.from_date + " → " + event.to_date}</div>}
+                                style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+                            // src={event.cover_img_link} 
+                            />
+                        </Card>
+                    ))}
+
+                </div>
+            </Spin>
+        </>
     );
 };
 
@@ -115,7 +114,7 @@ function EventCardLayoutV2({ userId, event_state }) {
                             <Spin size="large" />
                         </div>
                     ) : (
-                        console.log("selectedEventData",selectedEventData ),
+                        console.log("selectedEventData", selectedEventData),
                         <EventContent event_data={selectedEventData} />
                     )}
                 </Col>

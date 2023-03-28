@@ -7,7 +7,6 @@ import EmployeeTable from './employee/employee_table';
 import EmployeeChart from './employee/employee_chart';
 import JoinedEvent from './event/joined_event';
 import { useNavigate } from 'react-router-dom';
-import EventCardLayout from './event/event_card';
 import CreateEvent from './event/manager/create_event';
 import EventCardLayoutv2 from './event/admin/event_card';
 
