@@ -53,9 +53,9 @@ function MainWorkSpace() {
 
   const items = [
     getItem('Event', '1', <PieChartOutlined />, [
-      getItem('Joined', '11'),
-      getItem('Pendding', '12'),
-      getItem('Rejected', '13'),
+      getItem('Event list', '11'),
+      // getItem('Pendding', '12'),
+      // getItem('Rejected', '13'),
       // getItem('Create', '14'),
     ]
     ),
@@ -78,9 +78,9 @@ function MainWorkSpace() {
     items.push(
       getItem('Event - Admin', '4', <UserOutlined />, [
         getItem('Create Event', '41'),
-        getItem('Edit Event', '42'),
-        getItem('Remove Event', '43'),
-        getItem('Event Chart', '44'),
+        // getItem('Edit Event', '42'),
+        // getItem('Remove Event', '43'),
+        // getItem('Event Chart', '44'),
       ])
     );
   }
@@ -122,7 +122,7 @@ function MainWorkSpace() {
           <Menu
             theme="light"
             defaultSelectedKeys={['32']}
-            defaultOpenKeys={['1']}
+            defaultOpenKeys={['3']}
             mode="inline"
             items={items}
             onClick={handleMenuItemClick}

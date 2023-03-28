@@ -5,6 +5,11 @@ import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
+const baseURL = "https://stingy-ebony-shape.glitch.me/"
+localStorage.removeItem("backed_baseURL")
+localStorage.setItem('backed_baseURL', baseURL)
+console.log("saving local storage: baseURL:", baseURL)
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>

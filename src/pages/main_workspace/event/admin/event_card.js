@@ -34,7 +34,10 @@ function CardList({ userId, event_state, onCardClick }) {
                 if (data.event_id) {
                     const eventIds = Object.values(data.event_id);  // Convert object to array
                     const newEvents = eventIds.map((event_id, index) => {
-                        const e_data = JSON.parse(data.event_data[index].replace(/'/g, '"'));
+                        let e_data = data.event_data[index]
+                        if (typeof e_data === 'string'){
+                            e_data = JSON.parse(e_data.replace(/'/g, '"'));
+                        }
                         return {
                             id: event_id,
                             title: data.event_title[index], // Use event_id as key to get title
@@ -112,6 +115,7 @@ function EventCardLayoutV2({ userId, event_state }) {
                             <Spin size="large" />
                         </div>
                     ) : (
+                        console.log("selectedEventData",selectedEventData ),
                         <EventContent event_data={selectedEventData} />
                     )}
                 </Col>
