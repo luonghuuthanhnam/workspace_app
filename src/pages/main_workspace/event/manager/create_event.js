@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Input, DatePicker, Button, Form, Table, Row, Col, Modal, message, Popconfirm } from 'antd';
 import axios from 'axios';
-
+import { baseURL } from '../../../../config';
 const { RangePicker } = DatePicker;
 // const baseURL = "http://localhost:8000";
 // const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
-const baseURL = localStorage.getItem('backed_baseURL');
+// const baseURL = localStorage.getItem('backed_baseURL');
 
 const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     const [eventTitle, setEventTitle] = useState('');
@@ -217,7 +217,14 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                             okText="Save"
                             cancelText="Cancel"
                         >
-                            <Button type='primary'>Save</Button>
+                            <Button type='primary' disabled={
+                                !eventTitle ||
+                                eventDates.length === 0 ||
+                                // !eventDescription ||
+                                tables.length === 0
+                            }>
+                                Save
+                            </Button>
                         </Popconfirm>
                     </Form.Item>
                 </Form>

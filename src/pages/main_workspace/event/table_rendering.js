@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Button } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Button, message} from 'antd';
 
 const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
@@ -83,6 +83,7 @@ const EventDataTable = ({ event_data }) => {
   };
 
   const FinalSave = (tableData) => {
+    message.error('Submit function is under development');
     console.log('Final Save', tableData);
   };
 

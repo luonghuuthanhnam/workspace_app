@@ -1,8 +1,8 @@
-import { Row, Col, Input, Button } from 'antd';
+import { width } from '@mui/system';
+import { Row, Col, Input, Button, Spin, message} from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const baseURL = localStorage.getItem('backed_baseURL');
+import { baseURL } from '../../config';
 
 function LoginPage({ onLogin }) {
   const navigate = useNavigate();
@@ -10,8 +10,10 @@ function LoginPage({ onLogin }) {
   const [password, setPassword] = React.useState('');
   const [userId, setUserId] = React.useState(null);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [loading, setLoading] = React.useState(false); // Add loading state
 
   const handleLogin = () => {
+    setLoading(true); // Set loading state to true before making API call
     fetch(`${baseURL}/WorkingApp/Auth/Login`, {
       method: 'POST',
       headers: {
@@ -24,18 +26,21 @@ function LoginPage({ onLogin }) {
     })
       .then((response) => response.json())
       .then((data) => {
+        setLoading(false); // Reset loading state after receiving response
         if (data.user_id) {
           setUserId(data.user_id);
           localStorage.setItem('userID', data.user_id)
           console.log("USER_ID:", data.user_id)
-          onLogin(data.user_id); // Call onLogin function with the user id
-          // navigate('/MainWorkSpace'); // redirect to MainWorkSpace page
+          onLogin(data.user_id);
+          // navigate('/MainWorkSpace');
         } else {
+          message.error('WorkSpace Login Failed');
           setErrorMessage(data.message);
         }
       })
       .catch((error) => {
         console.error(error);
+        setLoading(false); // Reset loading state in case of error
       });
   };
 
@@ -59,8 +64,11 @@ function LoginPage({ onLogin }) {
             <img src="../images/logo.png" alt="Logo" style={{ width: '200px', marginBottom: '20px' }} />
             <Input placeholder="Email" style={{ marginBottom: '10px' }} value={email} onChange={(e) => setEmail(e.target.value)} />
             <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} />
-            <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>Login</Button>
-            <Button>Sign Up</Button>
+            {/* <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>Login</Button> */}
+            <Spin spinning={loading}> {/* Wrap the login button with Spin component */}
+              <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8"}} onClick={handleLogin}>Login</Button>
+              <Button>Sign Up</Button>
+            </Spin>
           </div>
         </Col>
       </Row>
