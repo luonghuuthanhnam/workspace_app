@@ -18,7 +18,7 @@ const defaultData = {
 
 
 // const baseURL = "http://localhost:8000";
-const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/"
+const baseURL = "https://stingy-ebony-shape.glitch.me/"
 localStorage.removeItem("backed_baseURL")
 localStorage.setItem('backed_baseURL', baseURL)
 console.log("saving local storage: baseURL:", baseURL)
