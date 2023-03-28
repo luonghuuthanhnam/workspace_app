@@ -9,6 +9,8 @@ import JoinedEvent from './event/joined_event';
 import { useNavigate } from 'react-router-dom';
 import EventCardLayout from './event/event_card';
 import CreateEvent from './event/manager/create_event';
+import EventCardLayoutv2 from './event/admin/event_card';
+
 const { Header, Content, Footer, Sider } = Layout;
 
 
@@ -169,9 +171,9 @@ function MainWorkSpace() {
             >
               {selectedMenuItem === '31' && <EmployeeTable />}
               {selectedMenuItem === '32' && <EmployeeChart />}
-              {selectedMenuItem === '11' && <EventCardLayout event_state="Joined" userId={userId} />}
-              {selectedMenuItem === '12' && <EventCardLayout event_state="Pendding" userId={userId} />}
-              {selectedMenuItem === '13' && <EventCardLayout event_state="Rejected" userId={userId} />}
+              {selectedMenuItem === '11' && <EventCardLayoutv2 event_state="Joined" userId={userId} />}
+              {selectedMenuItem === '12' && <EventCardLayoutv2 event_state="Pendding" userId={userId} />}
+              {selectedMenuItem === '13' && <EventCardLayoutv2 event_state="Rejected" userId={userId} />}
               {selectedMenuItem === '41' && <CreateEvent user_id={userId} onCreateEventSuccess={handleCreateEventSuccess}></CreateEvent>}
             </div>
           </Content>

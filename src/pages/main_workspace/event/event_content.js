@@ -2,7 +2,7 @@ import { Space, Table, Tag, Button, Row, Col, Divider, Popconfirm, message } fro
 import { Comment } from '@ant-design/compatible';
 import React from 'react';
 import EventComment from './event_comment';
-
+import EventDataTable from './table_rendering';
 const confirm = () => {
     message.info('Added to Joined event list');
 };
@@ -10,61 +10,16 @@ const reject = () => {
     message.info('Added to Reject event list');
 };
 const EventContent = ({ event_data }) => {
-    console.log("event_data", event_data)
-
-    // const handleYesClick = () => {
-    //     axios.post('/api/yes', { event_data })
-    //         .then(res => {
-    //             setResponse(res.data);
-    //         })
-    //         .catch(err => {
-    //             console.error(err);
-    //         });
-    // }
-
-    // const handleNoClick = () => {
-    //     axios.post('/api/no', { event_data })
-    //         .then(res => {
-    //             setResponse(res.data);
-    //         })
-    //         .catch(err => {
-    //             console.error(err);
-    //         });
-    // }
+    console.log("EventContent_data", event_data)
 
     if (event_data == null) {
         return null
     }
     return (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Col span={15} style={{ height: "100%" }}>
-                {event_data.event_state === 'Pendding' && (
-                    <Row style={{ marginTop: '5px', height: "2vh" }}>
-                        <Col span={4} style={{ marginLeft: "1vw", alignItems: "center", display: "flex" }}>
-                            <Popconfirm
-                                placement="topLeft"
-                                title="Join?"
-                                description="Confirm joining event"
-                                onConfirm={confirm}
-                                okText="Join"
-                                cancelText="Cancel"
-                            >
-                                <Button type="primary" size="medium" >Join</Button>
-                            </Popconfirm>
-                            <Popconfirm
-                                placement="topLeft"
-                                title="Reject?"
-                                description="Confirm joining event"
-                                onConfirm={reject}
-                                okText="Reject"
-                                cancelText="Cancel"
-                                okButtonProps={{ style: { backgroundColor: "#f50", color: "#fff" } }}
-                            >
-                                <Button type="dashed" size="medium" style={{ marginLeft: "10px", color: "#f50" }} danger>Reject</Button>
-                            </Popconfirm>
-                        </Col>
-                    </Row>
-                )}
+            <Col
+                // span={15} 
+                style={{ minHeight: "100%", width: "100%"}}>
                 <Row style={{ marginTop: '20px', height: "7vh", width: "50vw", alignItems: "center", display: "flex" }}>
                     <h1 style={{ margin: "0 1vw", fontSize: "5vh", fontStyle: "" }}>{event_data.title}</h1>
                 </Row>
@@ -78,30 +33,34 @@ const EventContent = ({ event_data }) => {
 
 
                 </Row>
-                <Divider orientation="left">Event Description</Divider>
                 <Row style={{ marginTop: '20px', height: "15vh" }}>
+                    <Divider orientation="left">Event Description</Divider>
                     <div style={{ fontSize: 18, color: "#4D4D4D", marginLeft: "2vw" }}>
                         {event_data.description}
                     </div>
                 </Row>
-                <Divider orientation="left">Announcement</Divider>
+                <Divider orientation="left">Tables</Divider>
+                <Row>
+                    <div style={{ width: "100%", marginLeft: "1vw" }}>
+                        <EventDataTable event_data={event_data}></EventDataTable>
+                    </div>
+                </Row>
+
+                {/* <Divider orientation="left">Announcement</Divider>
                 <Row style={{ marginTop: '20px' }}>
                     <Col span={12}>
                         <div>
                             Anoucement
                         </div>
                     </Col>
-                    {/* <Col span={12}>
-
-                    </Col> */}
-                </Row>
+                </Row> */}
             </Col>
-            <Col span={8} style={{}}>
+            {/* <Col span={8} style={{}}>
                 <Divider orientation="left">Comments</Divider>
                 <div>
                     <EventComment></EventComment>
                 </div>
-            </Col>
+            </Col> */}
         </div>
     );
 };

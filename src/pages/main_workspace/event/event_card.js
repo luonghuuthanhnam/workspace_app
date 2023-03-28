@@ -64,28 +64,26 @@ function CardList({ userId, event_state, onCardClick }) {
         <Card
           key={event.title}
           hoverable
-          // cover={<img alt="example"
-          // // src="https://bit.ly/3JlQRNM"
-          // style={{height: '15vh'}}
-          // />}
-
-          cover={<img alt={event.title} src={event.cover_img_link} style={{ height: '15vh' }} />}
-          style={{ margin: '1rem', backgroundColor: "#F0F0F0", height: "25vh", width: "80%" }}
+          // cover={<img alt={event.title} src={event.cover_img_link} style={{ height: '15vh' }} />}
+          style={{ margin: '1rem', backgroundColor: "#A3D2CA", minHeight: "10vh", width: "80%"}}
           onClick={() => handleInCardClick(event)}
 
         >
-          <Meta title={event.title}
-            // description={event.description}
-            src={event.cover_img_link} />
+          <Meta
+            title={<div style={{ flex: '1 0 auto' }}>{event.title}</div>}
+            description={<div style={{ flex: '1', flexGrow: 1 }}>{event.from_date + " - " + event.to_date}</div>}
+            style={{ display: 'flex', flexDirection: 'column', height: '100%'}}
+          // src={event.cover_img_link} 
+          />
         </Card>
       ))}
+      
     </div>
   );
 };
 
-function EventCardLayout({ userId, event_state }) {
+function EventCardLayout1({ userId, event_state }) {
   const [selectedEventData, setSelectedEventData] = useState(null);
-
 
   const [loading, setLoading] = useState(false);
 
@@ -121,4 +119,4 @@ function EventCardLayout({ userId, event_state }) {
     </div>
   )
 }
-export default EventCardLayout;
+export default EventCardLayout1;
