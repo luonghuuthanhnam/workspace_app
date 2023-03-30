@@ -58,9 +58,7 @@ function CardList({ userId, event_state, onCardClick }) {
     return (
         <>
             <Spin spinning={loading}>
-
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center" }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", overflowY:"scroll", maxHeight: "70vh"}}>
                     {events.map(event => (
                         <Card
                             key={event.title}
