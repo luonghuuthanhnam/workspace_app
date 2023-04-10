@@ -63,7 +63,7 @@ function LoginPage({ onLogin }) {
           <div style={{ maxWidth: '400px', textAlign: 'center' }}>
             <img src="../images/logo.png" alt="Logo" style={{ width: '200px', marginBottom: '20px' }} />
             <Input placeholder="Email" style={{ marginBottom: '10px' }} value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} onPressEnter={handleLogin}/>
             {/* <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>Login</Button> */}
             <Spin spinning={loading}> {/* Wrap the login button with Spin component */}
               <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8"}} onClick={handleLogin}>Login</Button>

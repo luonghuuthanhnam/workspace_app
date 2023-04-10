@@ -9,6 +9,7 @@ import JoinedEvent from './event/joined_event';
 import { useNavigate } from 'react-router-dom';
 import CreateEvent from './event/manager/create_event';
 import EventCardLayoutv2 from './event/admin/event_card';
+import ViewRegistedEvent from './event/manager/view_registed_event';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -77,6 +78,7 @@ function MainWorkSpace() {
     items.push(
       getItem('Event - Admin', '4', <UserOutlined />, [
         getItem('Create Event', '41'),
+        getItem('Event Registed Data', '42'),
         // getItem('Edit Event', '42'),
         // getItem('Remove Event', '43'),
         // getItem('Event Chart', '44'),
@@ -174,6 +176,8 @@ function MainWorkSpace() {
               {selectedMenuItem === '12' && <EventCardLayoutv2 event_state="Pendding" userId={userId} />}
               {selectedMenuItem === '13' && <EventCardLayoutv2 event_state="Rejected" userId={userId} />}
               {selectedMenuItem === '41' && <CreateEvent user_id={userId} onCreateEventSuccess={handleCreateEventSuccess}></CreateEvent>}
+              {selectedMenuItem === '42' && <ViewRegistedEvent></ViewRegistedEvent>}
+              
             </div>
           </Content>
           <Footer
