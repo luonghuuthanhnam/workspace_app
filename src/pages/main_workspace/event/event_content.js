@@ -30,8 +30,6 @@ const EventContent = ({ event_data }) => {
                     <Col span={4} style={{ marginLeft: "2vw", alignItems: "center", display: "flex" }}>
                         <Tag color="#f50" style={{ fontSize: "2vh" }}>To: {event_data.to_date}</Tag>
                     </Col>
-
-
                 </Row>
                 <Row style={{ marginTop: '20px', height: "15vh" }}>
                     <Divider orientation="left">Event Description</Divider>
@@ -61,6 +59,7 @@ const EventContent = ({ event_data }) => {
                     <EventComment></EventComment>
                 </div>
             </Col> */}
+
         </div>
     );
 };
