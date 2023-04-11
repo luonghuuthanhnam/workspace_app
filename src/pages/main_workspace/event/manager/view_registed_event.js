@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Select, Table } from 'antd';
+import { Select, Table, Divider, Input } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { baseURL } from '../../../../config';
 
@@ -11,6 +12,9 @@ const ViewRegistedEvent = () => {
     const [eventData, setEventData] = useState([]);
     const [tables, setTables] = useState([]);
     const [selectedTable, setSelectedTable] = useState(null);
+    const [tableColumns, setTableColumns] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    // const [statusFilter, setStatusFilter] = useState("");
 
     useEffect(() => {
         // Fetch list of registered events from API
@@ -50,27 +54,72 @@ const ViewRegistedEvent = () => {
         console.log("list tables", list_tables)
         setTables(list_tables);
         setSelectedTable(list_tables[0].id); // set the first table in the tables array as the default selected table
+        fetchTableData(list_tables[0].id);
     };
 
+    const handleSearch = (event) => {
+        const value = event.target.value.toLowerCase();
+        console.log("value", value)
+        console.log("value tables", eventData)
+        
+        const filteredData = eventData.filter(table =>
+            table.group_id.toLowerCase().includes(value)
+        );
+        console.log("filteredData", filteredData)
+        setSearchQuery(value);
+    
+        // Check if search query is empty and reset eventData state to original value
+        if (value === "") {
+            fetchTableData(selectedTable);
+        } else {
+            setEventData(filteredData);
+        }
+    };
+
+    
+    const fetchTableData = async (tableId) => {
+        try {
+            console.log("tableId:", tableId);
+            const response = await axios.post(`${baseURL}/event/query_registed_table_by_manager`, {
+                table_id: tableId,
+            });
+            // Process the response data as needed
+            console.log("table_data:", response.data);
+            const tableData = response.data;
+            const newColumns = Object.keys(tableData[0]).map(key => ({
+                title: key,
+                dataIndex: key,
+                key,
+            }));
+            setTableColumns(newColumns);
+            setEventData(tableData);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleTableSelect = (value) => {
         setSelectedTable(value);
-        console.log("selectedTable: ", value)
+        console.log("selectedTable: ", value);
+        if (selectedEvent) {
+            console.log("selectedEvent: ", selectedEvent)
+            fetchTableData(value);
+        }
     };
 
-    const columns = [
-        {
-            title: 'Column 1',
-            dataIndex: 'column1',
-            key: 'column1',
-        },
-        {
-            title: 'Column 2',
-            dataIndex: 'column2',
-            key: 'column2',
-        },
-        // Add more columns as needed
-    ];
+    // const columns = [
+    //     {
+    //         title: 'Column 1',
+    //         dataIndex: 'column1',
+    //         key: 'column1',
+    //     },
+    //     {
+    //         title: 'Column 2',
+    //         dataIndex: 'column2',
+    //         key: 'column2',
+    //     },
+
+    // ];
 
     let eventOptions = [];
 
@@ -93,6 +142,7 @@ const ViewRegistedEvent = () => {
                     <Option key={option.value} value={option.value}>{option.label}</Option>
                 ))}
             </Select>
+            <ArrowRightOutlined style={{marginLeft: "10px", marginRight: "10px"}}/>
             <Select
                 placeholder="Select a table"
                 onChange={handleTableSelect}
@@ -104,12 +154,19 @@ const ViewRegistedEvent = () => {
                     <Option key={table.id} value={table.id}>{table.name}</Option>
                 ))}
             </Select>
+            <Divider orientation='left'>Table Data</Divider>
+            <Input.Search
+                            placeholder="Search by group id"
+                            style={{ width: 300, marginLeft: "10px" }}
+                            onChange={handleSearch}
+                        />
 
             {selectedEvent && selectedTable && (
                 <Table
                     dataSource={eventData}
-                    columns={columns}
+                    columns={tableColumns}
                     pagination={false}
+                    style={{ marginTop: "1vh" }}
                 />
             )}
         </div>

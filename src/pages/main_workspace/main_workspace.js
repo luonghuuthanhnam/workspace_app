@@ -1,4 +1,4 @@
-import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined } from '@ant-design/icons';
+import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined, ScheduleOutlined ,UsergroupAddOutlined, ToolOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Button, ConfigProvider, Form, InputNumber } from 'antd';
 import { useState, useEffect } from 'react';
@@ -52,7 +52,7 @@ function MainWorkSpace() {
   };
 
   const items = [
-    getItem('Event', '1', <PieChartOutlined />, [
+    getItem('Event', '1', <ScheduleOutlined/>, [
       getItem('Event list', '11'),
       // getItem('Pendding', '12'),
       // getItem('Rejected', '13'),
@@ -60,7 +60,7 @@ function MainWorkSpace() {
     ]
     ),
     // getItem('Project List', '2', <DesktopOutlined />),
-    getItem('Employee', '3', <UserOutlined />, [
+    getItem('Employee', '3', <UsergroupAddOutlined />, [
       getItem('Table', '31'),
       getItem('Chart', '32'),
     ]),
@@ -76,9 +76,10 @@ function MainWorkSpace() {
 
   if (isAdmin) {
     items.push(
-      getItem('Event - Admin', '4', <UserOutlined />, [
+      getItem('Event - Admin', '4', <ToolOutlined/>, [
         getItem('Create Event', '41'),
-        getItem('Event Registed Data', '42'),
+        getItem('View Registed Data', '42'),
+        getItem('Event Dashboard', '43'),
         // getItem('Edit Event', '42'),
         // getItem('Remove Event', '43'),
         // getItem('Event Chart', '44'),
