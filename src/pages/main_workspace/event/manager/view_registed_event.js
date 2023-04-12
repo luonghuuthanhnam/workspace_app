@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Select, Table, Divider, Input } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import axios from 'axios';
@@ -14,10 +14,9 @@ const ViewRegistedEvent = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [tableColumns, setTableColumns] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    // const [statusFilter, setStatusFilter] = useState("");
-
+    const [searchText, setSearchText] = useState("");
+    
     useEffect(() => {
-        // Fetch list of registered events from API
         fetch(`${baseURL}/event/query`, {
             method: 'GET',
             headers: {
@@ -35,6 +34,7 @@ const ViewRegistedEvent = () => {
 
     const handleEventSelect = (value) => {
         setSelectedEvent(value);
+        setSearchText("");
         const event_ids = events.event_id;
         const index = Object.keys(event_ids).indexOf(Object.keys(event_ids).find(key => event_ids[key] === value));
         const eventData = events.event_data[index];
@@ -53,37 +53,34 @@ const ViewRegistedEvent = () => {
         }
         console.log("list tables", list_tables)
         setTables(list_tables);
-        setSelectedTable(list_tables[0].id); // set the first table in the tables array as the default selected table
+        setSelectedTable(list_tables[0].id);
         fetchTableData(list_tables[0].id);
     };
 
     const handleSearch = (event) => {
-        const value = event.target.value.toLowerCase();
-        console.log("value", value)
-        console.log("value tables", eventData)
-        
+        const value = event.target.value.toLowerCase().trim();
+        setSearchText(value);
         const filteredData = eventData.filter(table =>
-            table.group_id.toLowerCase().includes(value)
+            table.group_id.trim().toLowerCase().includes(value)
         );
-        console.log("filteredData", filteredData)
         setSearchQuery(value);
-    
-        // Check if search query is empty and reset eventData state to original value
+
+
         if (value === "") {
             fetchTableData(selectedTable);
+            setSearchQuery(filteredData);
         } else {
-            setEventData(filteredData);
+            setSearchQuery(filteredData);
         }
     };
 
-    
+
     const fetchTableData = async (tableId) => {
         try {
             console.log("tableId:", tableId);
             const response = await axios.post(`${baseURL}/event/query_registed_table_by_manager`, {
                 table_id: tableId,
             });
-            // Process the response data as needed
             console.log("table_data:", response.data);
             const tableData = response.data;
             const newColumns = Object.keys(tableData[0]).map(key => ({
@@ -93,6 +90,7 @@ const ViewRegistedEvent = () => {
             }));
             setTableColumns(newColumns);
             setEventData(tableData);
+            setSearchQuery(tableData);
         } catch (error) {
             console.error(error);
         }
@@ -100,26 +98,11 @@ const ViewRegistedEvent = () => {
 
     const handleTableSelect = (value) => {
         setSelectedTable(value);
-        console.log("selectedTable: ", value);
+        setSearchText("");
         if (selectedEvent) {
-            console.log("selectedEvent: ", selectedEvent)
             fetchTableData(value);
         }
     };
-
-    // const columns = [
-    //     {
-    //         title: 'Column 1',
-    //         dataIndex: 'column1',
-    //         key: 'column1',
-    //     },
-    //     {
-    //         title: 'Column 2',
-    //         dataIndex: 'column2',
-    //         key: 'column2',
-    //     },
-
-    // ];
 
     let eventOptions = [];
 
@@ -130,7 +113,6 @@ const ViewRegistedEvent = () => {
             label: events.event_title[key]
         }));
     }
-
     return (
         <div>
             <Select
@@ -142,32 +124,36 @@ const ViewRegistedEvent = () => {
                     <Option key={option.value} value={option.value}>{option.label}</Option>
                 ))}
             </Select>
-            <ArrowRightOutlined style={{marginLeft: "10px", marginRight: "10px"}}/>
+            <ArrowRightOutlined style={{ marginLeft: "10px", marginRight: "10px" }} />
             <Select
                 placeholder="Select a table"
                 onChange={handleTableSelect}
                 style={{ width: 200 }}
-                disabled={!selectedEvent} // disable the table selection until an event is selected
-                value={selectedTable} // set the value of the selected table
+                disabled={!selectedEvent}
+                value={selectedTable}
             >
                 {tables.length > 0 && tables.map(table => (
                     <Option key={table.id} value={table.id}>{table.name}</Option>
                 ))}
             </Select>
             <Divider orientation='left'>Table Data</Divider>
-            <Input.Search
-                            placeholder="Search by group id"
-                            style={{ width: 300, marginLeft: "10px" }}
-                            onChange={handleSearch}
-                        />
 
             {selectedEvent && selectedTable && (
+                <>
+                <Input.Search
+                    placeholder="Search by group id"
+                    style={{ width: 300, marginLeft: "10px" }}
+                    onChange={handleSearch}
+                    onSearch={handleSearch}
+                    value={searchText}
+                    />
                 <Table
-                    dataSource={eventData}
+                    dataSource={searchQuery}
                     columns={tableColumns}
                     pagination={false}
                     style={{ marginTop: "1vh" }}
-                />
+                    />
+                    </>
             )}
         </div>
     );
