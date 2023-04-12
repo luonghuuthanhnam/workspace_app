@@ -27,11 +27,14 @@ function LoginPage({ onLogin }) {
       .then((response) => response.json())
       .then((data) => {
         setLoading(false); // Reset loading state after receiving response
-        if (data.user_id) {
+
+        if (data != null) {
           setUserId(data.user_id);
           localStorage.setItem('userID', data.user_id)
-          console.log("USER_ID:", data.user_id)
+          localStorage.setItem('user_name', data.user_name)
+          localStorage.setItem('group_id', data.group_id)
           onLogin(data.user_id);
+          message.success(`Welcome ${data.user_name}`);
           // navigate('/MainWorkSpace');
         } else {
           message.error('WorkSpace Login Failed');
