@@ -32,6 +32,7 @@ function MainWorkSpace() {
 
 
   const userId = localStorage.getItem('userID');
+  const group_id = localStorage.getItem('group_id');
   const adminIds = ["19031998", "12345678", "87654321"]; // replace with your list of admin IDs
   const isAdmin = adminIds.includes(userId);
   useEffect(() => {

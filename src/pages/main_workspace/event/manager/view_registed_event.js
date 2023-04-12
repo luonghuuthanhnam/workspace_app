@@ -58,14 +58,12 @@ const ViewRegistedEvent = () => {
     };
 
     const handleSearch = (event) => {
-        const value = event.target.value.toLowerCase().trim();
+        const value = event.target.value.replace(/^\s+/, '').toLowerCase();
         setSearchText(value);
         const filteredData = eventData.filter(table =>
-            table.group_id.trim().toLowerCase().includes(value)
+            table.group_name.trim().toLowerCase().includes(value)
         );
         setSearchQuery(value);
-
-
         if (value === "") {
             fetchTableData(selectedTable);
             setSearchQuery(filteredData);
@@ -84,7 +82,7 @@ const ViewRegistedEvent = () => {
             console.log("table_data:", response.data);
             const tableData = response.data;
             const newColumns = Object.keys(tableData[0]).map(key => ({
-                title: key,
+                title: key === 'group_name' ? 'Đơn Vị' : key,
                 dataIndex: key,
                 key,
             }));
@@ -141,7 +139,7 @@ const ViewRegistedEvent = () => {
             {selectedEvent && selectedTable && (
                 <>
                 <Input.Search
-                    placeholder="Search by group id"
+                    placeholder="Search department"
                     style={{ width: 300, marginLeft: "10px" }}
                     onChange={handleSearch}
                     onSearch={handleSearch}

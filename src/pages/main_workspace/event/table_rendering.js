@@ -29,6 +29,7 @@ const EditableCell = ({ editing, dataIndex, title, inputType, record, index, chi
 
 const EventDataTable = ({ event_data }) => {
   const user_id = localStorage.getItem('userID');
+  const group_id = localStorage.getItem('group_id');
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState({});
   const [tableData, setTableData] = useState(event_data.tables);
@@ -49,7 +50,7 @@ const EventDataTable = ({ event_data }) => {
       },
       body: JSON.stringify({
         "event_id": event_data.id,
-        "user_id": user_id,
+        "group_id": group_id,
       }),
     })
       .then((response) => {
@@ -57,6 +58,7 @@ const EventDataTable = ({ event_data }) => {
       })
       .then((data) => {
         if (data != null) {
+          console.log('registed data', data)
           const registed_table_data = data;
           setTableData(registed_table_data);
         }
@@ -112,10 +114,9 @@ const EventDataTable = ({ event_data }) => {
   };
 
   const FinalSave = (event_data) => {
-    message.error('Submit function is under development');
-    console.log('Final ', event_data);
+    // message.error('Submit function is under development');
     event_data.updated_at = new Date().toISOString();
-
+    event_data.tables = tableData;
     fetch(`${baseURL}/event/update`, {
       method: 'POST',
       headers: {
@@ -124,24 +125,24 @@ const EventDataTable = ({ event_data }) => {
       body: JSON.stringify({
         "event_data": event_data,
         "user_id": user_id,
+        "group_id": group_id,
       }),
     })
       .then((response) => {
         return response.json(); // Return the promise
       })
       .then((data) => {
-        console.log(data);
-        if (data.message === "Create event success") { // Check the message property
-          message.success('Event created successfully');
+        if (data.message === "Update event success") { // Check the message property
+          message.success('Event updated successfully');
           // setCreateEventSuccess(true); // set createEventSuccess state variable to true on success
         }
         else {
-          message.error('Unable to create event');
+          message.error('Unable to update event 1');
         }
       })
       .catch((error) => {
         console.error(error);  // Handle error
-        message.error('Unable to create event');
+        message.error('Unable to update event');
       });
   };
 

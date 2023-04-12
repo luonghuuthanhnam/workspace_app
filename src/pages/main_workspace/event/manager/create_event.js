@@ -36,7 +36,6 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     };
 
     const handleSaveV2 = () => {
-
         const tablesData = [];
         console.log("user_id", user_id)
         tables.forEach((table, index) => {
@@ -158,13 +157,13 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     };
 
 
-    const handleSave = () => {
-        console.log("Tables Data:");
-        tables.forEach((table, index) => {
-            console.log(`${tableNames[index]}`);
-            console.table(table.data);
-        });
-    };
+    // const handleSave = () => {
+    //     console.log("Tables Data:");
+    //     tables.forEach((table, index) => {
+    //         console.log(`${tableNames[index]}`);
+    //         console.table(table.data);
+    //     });
+    // };
 
     const confirm_save = () => {
         // message.info('Saved new event');
