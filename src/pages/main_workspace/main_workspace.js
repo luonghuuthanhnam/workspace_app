@@ -1,5 +1,5 @@
 import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined, ScheduleOutlined ,UsergroupAddOutlined, ToolOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Affix } from 'antd';
 import { Button, ConfigProvider, Form, InputNumber } from 'antd';
 import { useState, useEffect } from 'react';
 import LoginPage from '../login/login';
@@ -101,9 +101,11 @@ function MainWorkSpace() {
       }}
     >
       <Layout style={{ minHeight: '100vh' }}>
+      <Affix offsetTop={10}>
         <Sider
           style={{
             backgroundColor: '#FFFFFF',
+            height:"100%",
           }}
           collapsible
           collapsed={collapsed}
@@ -131,6 +133,7 @@ function MainWorkSpace() {
             onClick={handleMenuItemClick}
           />
         </Sider>
+        </Affix>
         <Layout className="site-layout">
           <Header
             style={{
