@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, Table, Divider, Input } from 'antd';
+import { Select, Table, Divider, Input, Affix } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { baseURL } from '../../../../config';
@@ -65,7 +65,7 @@ const ViewRegistedEvent = () => {
         );
         setSearchQuery(value);
         if (value === "") {
-            fetchTableData(selectedTable);
+            // fetchTableData(selectedTable);
             setSearchQuery(filteredData);
         } else {
             setSearchQuery(filteredData);
@@ -138,6 +138,7 @@ const ViewRegistedEvent = () => {
 
             {selectedEvent && selectedTable && (
                 <>
+                <Affix offsetTop={10}>
                 <Input.Search
                     placeholder="Search department"
                     style={{ width: 300, marginLeft: "10px" }}
@@ -145,14 +146,15 @@ const ViewRegistedEvent = () => {
                     onSearch={handleSearch}
                     value={searchText}
                     />
-                <Table
-                    dataSource={searchQuery}
-                    columns={tableColumns}
-                    pagination={false}
-                    style={{ marginTop: "1vh" }}
-                    />
+                </Affix>
                     </>
             )}
+            <Table
+                dataSource={searchQuery}
+                columns={tableColumns}
+                pagination={{ pageSize: 15 }}
+                style={{ marginTop: "1vh" }}
+                />
         </div>
     );
 };
