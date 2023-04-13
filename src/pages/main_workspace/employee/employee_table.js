@@ -37,7 +37,7 @@ const EmployeeTable = () => {
             pageSize: 25,
           }}
           scroll={{
-            y: "56vh",
+            y: "70vh",
             x: "75vw"
           }}
         />

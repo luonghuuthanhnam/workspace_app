@@ -103,10 +103,10 @@ function EventCardLayoutV2({ userId, event_state }) {
     return (
         <div >
             <Row justify="space-between" style={{ marginTop: '20px' }}>
-                <Col span={4} style={{ border: "solid #A3D2CA", borderWidth: "0 1px 0 0", height: "74vh" }}>
+                <Col span={4} style={{ border: "solid #A3D2CA", borderWidth: "0 1px 0 0", height: "80vh" }}>
                     <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick} />
                 </Col>
-                <Col span={20} style={{ minHeight: "74vh", paddingLeft: "2%" }}>
+                <Col span={20} style={{ height: "80vh", paddingLeft: "2%" }}>
                     {loading ? (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "100%" }}>
                             <Spin size="large" />

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, Table, Divider, Input, Affix } from 'antd';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import { Select, Table, Divider, Input, Affix, Button, message, Popconfirm } from 'antd';
+import { ArrowRightOutlined, DownloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { baseURL } from '../../../../config';
+import * as XLSX from 'xlsx';
 
 const { Option } = Select;
 
@@ -13,9 +14,10 @@ const ViewRegistedEvent = () => {
     const [tables, setTables] = useState([]);
     const [selectedTable, setSelectedTable] = useState(null);
     const [tableColumns, setTableColumns] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(eventData);
     const [searchText, setSearchText] = useState("");
-    
+    const [groupNames, setGroupNames] = useState([]);
+
     useEffect(() => {
         fetch(`${baseURL}/event/query`, {
             method: 'GET',
@@ -34,7 +36,7 @@ const ViewRegistedEvent = () => {
 
     const handleEventSelect = (value) => {
         setSelectedEvent(value);
-        setSearchText("");
+        setSearchText("Tất cả");
         const event_ids = events.event_id;
         const index = Object.keys(event_ids).indexOf(Object.keys(event_ids).find(key => event_ids[key] === value));
         const eventData = events.event_data[index];
@@ -56,21 +58,20 @@ const ViewRegistedEvent = () => {
         setSelectedTable(list_tables[0].id);
         fetchTableData(list_tables[0].id);
     };
-
-    const handleSearch = (event) => {
-        const value = event.target.value.replace(/^\s+/, '').toLowerCase();
-        setSearchText(value);
-        const filteredData = eventData.filter(table =>
-            table.group_name.trim().toLowerCase().includes(value)
-        );
+    const handleSearch = (value) => {
         setSearchQuery(value);
-        if (value === "") {
-            // fetchTableData(selectedTable);
-            setSearchQuery(filteredData);
+        setSearchText(value);
+        if (value === "" || value === "Tất cả") {
+          setSearchQuery(eventData);
         } else {
-            setSearchQuery(filteredData);
+          value = value.replace(/^\s+/, '').toLowerCase();
+          setSearchText(value);
+          const filteredData = eventData.filter(table =>
+            table.group_name.trim().toLowerCase().includes(value)
+          );
+          setSearchQuery(filteredData);
         }
-    };
+      };
 
 
     const fetchTableData = async (tableId) => {
@@ -81,10 +82,27 @@ const ViewRegistedEvent = () => {
             });
             console.log("table_data:", response.data);
             const tableData = response.data;
+            const groupNames = [...new Set(tableData.map(data => data.group_name))];
+            groupNames.unshift("Tất cả");
+            setGroupNames(groupNames);
+            console.log("groupNames", groupNames);
+            // const newColumns = Object.keys(tableData[0]).map(key => ({
+            //     title: key === 'group_name' ? 'Đơn Vị' : key,
+            //     dataIndex: key,
+            //     key,
+            // }));
+            const groupValues = [...new Set(tableData.map(data => data.group_name))];
             const newColumns = Object.keys(tableData[0]).map(key => ({
                 title: key === 'group_name' ? 'Đơn Vị' : key,
                 dataIndex: key,
                 key,
+                // sorter: key === 'Tên' ? (a, b) => a[key].localeCompare(b[key]) : undefined,
+                sorter: key === 'Tên' ? (a, b) => {
+                    const aLastName = a[key].split(' ').pop();
+                    const bLastName = b[key].split(' ').pop();
+                    return aLastName.localeCompare(bLastName);
+                } : undefined
+                // filters: key === 'group_name' ? groupValues.map(value => ({ text: value, value })) : undefined,
             }));
             setTableColumns(newColumns);
             setEventData(tableData);
@@ -96,7 +114,8 @@ const ViewRegistedEvent = () => {
 
     const handleTableSelect = (value) => {
         setSelectedTable(value);
-        setSearchText("");
+        // setSearchText("");
+        setSearchText("Tất cả");
         if (selectedEvent) {
             fetchTableData(value);
         }
@@ -111,8 +130,39 @@ const ViewRegistedEvent = () => {
             label: events.event_title[key]
         }));
     }
+
+    const handleExport = () => {
+        // Convert data to worksheet
+        const worksheet = XLSX.utils.json_to_sheet(searchQuery);
+
+        // Create a new workbook and add the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+        // Generate a download link for the Excel file
+        const file = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+        const blob = new Blob([s2ab(file)], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+
+        // Download the Excel file
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'data.xlsx';
+        link.click();
+    };
+
+    // Utility function to convert a string to an ArrayBuffer
+    const s2ab = (s) => {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) {
+            view[i] = s.charCodeAt(i) & 0xff;
+        }
+        return buf;
+    };
+    const [container, setContainer] = useState(null);
     return (
-        <div>
+        <div style={{height: "100%", overflow:"scroll"}} ref={setContainer}>
             <Select
                 placeholder="Select an event"
                 onChange={handleEventSelect}
@@ -138,23 +188,35 @@ const ViewRegistedEvent = () => {
 
             {selectedEvent && selectedTable && (
                 <>
-                <Affix offsetTop={10}>
-                <Input.Search
-                    placeholder="Search department"
-                    style={{ width: 300, marginLeft: "10px" }}
-                    onChange={handleSearch}
-                    onSearch={handleSearch}
-                    value={searchText}
-                    />
-                </Affix>
-                    </>
+                    {/* <Affix offsetTop={"13vh"}> */}
+                    <Affix target={() => container}>
+                        <Select
+                            placeholder="Select Department"
+                            onChange={(value) => handleSearch(value)}
+                            style={{ width: 200 }}
+                            value={searchText}
+                        >
+                            {groupNames.map(option => (
+                                <Option key={option} value={option}>{option}</Option>
+                            ))}
+                        </Select>
+                        <Popconfirm placement="topRight"
+                            title="Save?"
+                            description="Save as Excel file?"
+                            onConfirm={handleExport}
+                            okText="Save"
+                            cancelText="Cancel">
+                            <Button type="primary" icon={<DownloadOutlined />} style={{ marginLeft: "10px" }}>Save</Button>
+                        </Popconfirm>
+                    </Affix>
+                </>
             )}
             <Table
                 dataSource={searchQuery}
                 columns={tableColumns}
                 pagination={{ pageSize: 15 }}
                 style={{ marginTop: "1vh" }}
-                />
+            />
         </div>
     );
 };

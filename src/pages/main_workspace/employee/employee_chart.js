@@ -39,7 +39,7 @@ const EmployeeChart = () => {
         });
     }
     return (
-        <>
+        <div style ={{ height: '100%', overflow: "scroll"}}>
             <Spin spinning={loading}>
                 <div className="employee_main_div">
                     <Row justify="space-between" style={{ marginTop: '20px' }}>
@@ -66,7 +66,7 @@ const EmployeeChart = () => {
 
                 </div>
             </Spin>
-        </>
+        </div>
     );
 };
 export default EmployeeChart;
