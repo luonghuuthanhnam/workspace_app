@@ -74,43 +74,45 @@ const ViewRegistedEvent = () => {
       };
 
 
-    const fetchTableData = async (tableId) => {
+      const fetchTableData = async (tableId) => {
         try {
-            console.log("tableId:", tableId);
-            const response = await axios.post(`${baseURL}/event/query_registed_table_by_manager`, {
-                table_id: tableId,
-            });
-            console.log("table_data:", response.data);
-            const tableData = response.data;
-            const groupNames = [...new Set(tableData.map(data => data.group_name))];
-            groupNames.unshift("Tất cả");
-            setGroupNames(groupNames);
-            console.log("groupNames", groupNames);
-            // const newColumns = Object.keys(tableData[0]).map(key => ({
-            //     title: key === 'group_name' ? 'Đơn Vị' : key,
-            //     dataIndex: key,
-            //     key,
-            // }));
-            const groupValues = [...new Set(tableData.map(data => data.group_name))];
-            const newColumns = Object.keys(tableData[0]).map(key => ({
-                title: key === 'group_name' ? 'Đơn Vị' : key,
-                dataIndex: key,
-                key,
-                // sorter: key === 'Tên' ? (a, b) => a[key].localeCompare(b[key]) : undefined,
-                sorter: key === 'Tên' ? (a, b) => {
-                    const aLastName = a[key].split(' ').pop();
-                    const bLastName = b[key].split(' ').pop();
+          console.log("tableId:", tableId);
+          const response = await axios.post(`${baseURL}/event/query_registed_table_by_manager`, {
+            table_id: tableId,
+          });
+          console.log("table_data:", response.data);
+          const tableData = response.data;
+          if (tableData === null) {
+            setTableColumns([]);
+            setEventData([]);
+            setSearchQuery([]);
+            return;
+          }
+          const groupNames = [...new Set(tableData.map((data) => data.group_name))];
+          groupNames.unshift("Tất cả");
+          setGroupNames(groupNames);
+          console.log("groupNames", groupNames);
+          const groupValues = [...new Set(tableData.map((data) => data.group_name))];
+          const newColumns = Object.keys(tableData[0]).map((key) => ({
+            title: key === "group_name" ? "Đơn Vị" : key,
+            dataIndex: key,
+            key,
+            sorter:
+              key === "Tên"
+                ? (a, b) => {
+                    const aLastName = a[key].split(" ").pop();
+                    const bLastName = b[key].split(" ").pop();
                     return aLastName.localeCompare(bLastName);
-                } : undefined
-                // filters: key === 'group_name' ? groupValues.map(value => ({ text: value, value })) : undefined,
-            }));
-            setTableColumns(newColumns);
-            setEventData(tableData);
-            setSearchQuery(tableData);
+                  }
+                : undefined,
+          }));
+          setTableColumns(newColumns);
+          setEventData(tableData === null ? [] : tableData); // Update setEventData to set empty data if tableData is null
+          setSearchQuery(tableData);
         } catch (error) {
-            console.error(error);
+          console.error(error);
         }
-    };
+      };
 
     const handleTableSelect = (value) => {
         setSelectedTable(value);

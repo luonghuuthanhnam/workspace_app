@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
+import {QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
 
 
@@ -146,6 +147,21 @@ const EventDataTable = ({ event_data }) => {
       });
   };
 
+  const handleDelete = (key, tableName) => {
+    const newData = [...tableData];
+    const tableIndex = newData.findIndex((table) => table.name === tableName);
+  
+    if (tableIndex > -1) {
+      const rowIndex = newData[tableIndex].data.findIndex((item) => key === item.key);
+  
+      if (rowIndex > -1) {
+        newData[tableIndex].data.splice(rowIndex, 1);
+        setTableData(newData);
+        setForceUpdate(forceUpdate + 1);
+      }
+    }
+  };
+
   return (
     <>
       {tableData.map((table) => {
@@ -173,25 +189,45 @@ const EventDataTable = ({ event_data }) => {
             )),
           })),
           {
-            title: 'Operation',
+            title: 'Tùy chỉnh',
             dataIndex: 'operation',
             fixed: 'right',
-            width: 80,
+            // width: 120,
             render: (_, record) => {
               const editable = isEditing(record, table.name);
-              return editable ? (
+              return (
                 <span>
-                  <a onClick={() => save(record.key, table.name)} style={{ marginRight: 8 }}>
-                    Save
-                  </a>
-                  <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(table.name)}>
-                    <a>Cancel</a>
-                  </Popconfirm>
+                  {editable ? (
+                    <span>
+                      <a onClick={() => save(record.key, table.name)} style={{ marginRight: 8 }}>
+                        Save
+                      </a>
+                      <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(table.name)}>
+                        <a style={{ marginRight: 8 }} >Cancel</a>
+                      </Popconfirm>
+                      <Popconfirm
+                        title="Are you sure DELETE this row?"
+                        icon={
+                          <QuestionCircleOutlined
+                            style={{
+                              color: 'red',
+                            }}
+                          />
+                        }
+                        onConfirm={() => handleDelete(record.key, table.name)}
+                      >
+                        <a type='primary' style={{color:'#E96767'}} >Delete</a>
+                      </Popconfirm>
+                    </span>
+                  ) : (
+                    <span>
+                      <Button type='primary' disabled={false} onClick={() => edit(record, table.name)} style={{ marginRight: 8 }}>
+                        Edit
+                      </Button>
+                      
+                    </span>
+                  )}
                 </span>
-              ) : (
-                <a disabled={false} onClick={() => edit(record, table.name)}>
-                  Edit
-                </a>
               );
             },
           },

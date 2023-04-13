@@ -158,13 +158,13 @@ function MainWorkSpace() {
           <Header
             style={{
               padding: 0,
-              height: "5vh",
+              height: "5%",
               background: '#A3D2CA',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "100%" }}>
               <h3 style={{marginLeft: "0.8vw", color:"#FFFFFF"}}>WORKSPACE ON CLOUD</h3>
-              <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF" }} onClick={handleLogout}>Log out</Button>
+              <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Log out</Button>
             </div>
           </Header>
           <Content
@@ -192,7 +192,7 @@ function MainWorkSpace() {
             <div
               style={{
                 padding: 15,
-                height: "88vh",
+                height: "92%",
                 // height: ,
                 background: colorBgContainer,
               }}
