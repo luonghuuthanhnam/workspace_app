@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Input, DatePicker, Button, Form, Table, Row, Col, Modal, message, Popconfirm, Divider } from 'antd';
-import axios from 'axios';
+import { Input, DatePicker, Button, Form, Table, Row, Col, Modal, message, Popconfirm, Affix } from 'antd';
 import { baseURL } from '../../../../config';
-import { style } from '@mui/system';
 import { v4 as uuidv4 } from 'uuid';
+import TagColumn from './tags_table_columns';
 const { RangePicker } = DatePicker;
-// const baseURL = "http://localhost:8000";
-// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
-// const baseURL = localStorage.getItem('backed_baseURL');
 
 const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     const [eventTitle, setEventTitle] = useState('');
@@ -82,35 +78,17 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
             });
     };
 
-    const handleTableColumnsChange = (event) => {
-        const columns = event.target.value.split(/\s*,\s*/).map((column, index) => ({
-            title: column,
-            dataIndex: `column${index}`,
-            key: `column${index}`,
-        }));
-        const columnTitles = columns.map((column) => column.title);
-        if (new Set(columnTitles).size !== columnTitles.length) {
-            // If there are duplicates
-            Modal.error({
-                title: 'Error',
-                content: 'Table columns cannot be duplicated',
-            });
-        } else {
-            setTableColumns(columns);
-        }
-    };
-
     const handleCreateTable = () => {
         const columns = tableColumns.map((column) => ({ ...column, dataIndex: column.title }));
         const initialData = [{ key: '0', ...Object.fromEntries(columns.map((column) => [column.dataIndex, '...'])) }];
         const newTable = { id: uuidv4(), columns, data: initialData }; // add id property with UUID
         const newTables = [...tables, newTable];
         setTables(newTables);
-    
+
         const newTableNames = [...tableNames, tableName];
         setTableNames(newTableNames);
-    
-        setTableColumns([]);
+
+        // setTableColumns([]);
         setTableName('');
     };
 
@@ -157,16 +135,7 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     };
 
 
-    // const handleSave = () => {
-    //     console.log("Tables Data:");
-    //     tables.forEach((table, index) => {
-    //         console.log(`${tableNames[index]}`);
-    //         console.table(table.data);
-    //     });
-    // };
-
     const confirm_save = () => {
-        // message.info('Saved new event');
         handleSaveV2()
     };
 
@@ -187,31 +156,60 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
             // history.push('/main-workspace'); // redirect to main workspace on success
         }
     }, [createEventSuccess]);
+    const [previousTags, setPreviousTags] = useState([]);
 
+    const handleTagsChange = (tags) => {
+    if (JSON.stringify(tags) !== JSON.stringify(previousTags)) {
+        console.log("tags", tags)
+        const columns = tags.map((column, index) => ({
+            title: column,
+            dataIndex: `column${index}`,
+            key: `column${index}`,
+        }));
+        setTableColumns(columns);
+        setPreviousTags(tags);
+    }
+    }
+    // const handleTagsChange = (tags) => {
+    //     console.log("tags", tags)
+        // const columns = tags.map((column, index) => ({
+        //     title: column,
+        //     dataIndex: `column${index}`,
+        //     key: `column${index}`,
+        // }));
+        // setTableColumns(columns);
+    // }
+    const [container, setContainer] = useState(null);
     return (
-        <div style={{ display: "flex", marginLeft: "2vw" }}>
+        <div style={{ display: "flex", marginLeft: "2vw", height: "100%" ,overflowY: "scroll",  marginBottom: "1vh"}} ref={setContainer}>
             <Col span={8}>
+                <Affix target={() => container}>
+                <section style={{ width: "100%", borderStyle: "solid", padding: "5%", borderColor: "#E3E3E3", borderWidth: "1px", borderRadius: "1vw", marginBottom: "1vh"}}>
+
                 {/* <h1>Create Event</h1> */}
                 <Form layout="vertical">
-                    <Form.Item label="Event Title" style={{width:"40%"}}>
+                    <Form.Item label="Event Title" style={{ width: "100%" }}>
                         <Input value={eventTitle} onChange={handleTitleChange} />
                     </Form.Item>
-                    <Form.Item label="Event Dates" style={{width:"40%"}}>
+                    <Form.Item label="Event Dates" style={{ width: "100%" }}>
                         <RangePicker value={eventDates} onChange={handleDatesChange} />
                     </Form.Item>
                     <Form.Item label="Event Description">
-                        <Input.TextArea value={eventDescription} onChange={handleDescriptionChange} style={{height:"15vh"}}/>
+                        <Input.TextArea value={eventDescription} onChange={handleDescriptionChange} style={{ height: "15vh" }} />
                     </Form.Item>
                     <Form.Item label="Table Name">
                         <Input value={tableName} onChange={(event) => setTableName(event.target.value)} />
                     </Form.Item>
                     <Form.Item label="Table Columns">
-                        <Input value={tableColumns.map((column) => column.title).join(', ')} onChange={handleTableColumnsChange} />
+                        <TagColumn onTagsChange={handleTagsChange} />
                     </Form.Item>
                     <Form.Item>
+                        <div style={{display:"flex",justifyContent: "space-between"}}>
+
                         <Button onClick={handleCreateTable} disabled={!tableName}>Create Table</Button>
-                    </Form.Item>
-                    <Form.Item style={{display: "flex", justifyContent: "flex-end" }}>
+                       
+                    {/* </Form.Item>
+                    <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}> */}
                         <Popconfirm
                             disabled={
                                 !eventTitle ||
@@ -225,51 +223,54 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                             onConfirm={confirm_save}
                             okText="Save"
                             cancelText="Cancel"
-                        >
+                            >
                             <Button type='primary' disabled={
                                 !eventTitle ||
                                 eventDates.length === 0 ||
                                 // !eventDescription ||
                                 tables.length === 0
-                            } style={{width: "7vw"}}>
-                                Save
+                            } style={{ width: "7vw" }}>
+                                Done
                             </Button>
                         </Popconfirm>
+                        </div>
                     </Form.Item>
                 </Form>
+            </section>
+            </Affix>
             </Col>
 
-            <Divider type="vertical" style={{ marginLeft: "1vw" }}/>
             <Col span={14} style={{ marginLeft: "2vw" }}>
-                    <Row gutter={[16, 16]}>
-                        {tables.map((table, index) => (
-                            <Col style={{ width: "100%" }} key={index}>
-                                <h2>{tableNames[index]}</h2>
-                                <Button onClick={() => handleEditTable(index, tableNames[index])}>Edit</Button>
-                                <Button onClick={() => handleDeleteTable(index)}>Delete</Button>
-                                <Table dataSource={table.data} columns={table.columns} />
-                                {editingTableIndex === index && (
-                                    <Modal title={`Edit Table - ${editedTableName}`} open={true} onOk={handleSaveTable} onCancel={() => setEditingTableIndex(-1)}>
-                                        <Form.Item label="Table Name">
-                                            <Input value={editedTableName} onChange={(event) => setEditedTableName(event.target.value)} />
-                                        </Form.Item>
-                                        {editingTableColumns.map((column, index) => (
-                                            <div key={index}>
-                                                <Input value={column.title} onChange={(event) => {
-                                                    const newColumns = [...editingTableColumns];
-                                                    newColumns[index] = { ...newColumns[index], title: event.target.value };
-                                                    setEditingTableColumns(newColumns);
-                                                }} />
-                                                <Button onClick={() => handleRemoveColumn(index)}>Remove</Button>
-                                            </div>
-                                        ))}
-                                        <Button onClick={handleAddColumn}>Add Column</Button>
-                                    </Modal>
-                                )}
-                            </Col>
-                        ))}
-                    </Row>
+                <Row gutter={[16, 16]}>
+                    {tables.map((table, index) => (
+                        <Col style={{ width: "100%" }} key={index}>
+                            <h2>{tableNames[index]}</h2>
+                            <Button onClick={() => handleEditTable(index, tableNames[index])}>Edit</Button>
+                            <Button onClick={() => handleDeleteTable(index)}>Delete</Button>
+                            <Table dataSource={table.data} columns={table.columns} />
+                            {editingTableIndex === index && (
+                                <Modal title={`Edit Table - ${editedTableName}`} open={true} onOk={handleSaveTable} onCancel={() => setEditingTableIndex(-1)}>
+                                    <Form.Item label="Table Name">
+                                        <Input value={editedTableName} onChange={(event) => setEditedTableName(event.target.value)} />
+                                    </Form.Item>
+                                    {editingTableColumns.map((column, index) => (
+                                        <div key={index}>
+                                            <Input value={column.title} onChange={(event) => {
+                                                const newColumns = [...editingTableColumns];
+                                                newColumns[index] = { ...newColumns[index], title: event.target.value };
+                                                setEditingTableColumns(newColumns);
+                                            }} />
+                                            <Button onClick={() => handleRemoveColumn(index)}>Remove</Button>
+                                        </div>
+                                    ))}
+                                    <Button onClick={handleAddColumn}>Add Column</Button>
+                                </Modal>
+                            )}
+                        </Col>
+                    ))}
+                </Row>
             </Col>
+
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'antd';
 import { type } from '@testing-library/user-event/dist/type';
-import { Space, Table, Tag, Button, Row, Col, Spin, Popconfirm } from 'antd';
+import { Affix, Table, Tag, Button, Row, Col, Spin, Popconfirm } from 'antd';
 import EventContent from '../event_content';
 import { json } from 'react-router-dom';
 import { baseURL } from '../../../../config';
@@ -58,7 +58,7 @@ function CardList({ userId, event_state, onCardClick }) {
     return (
         <>
             <Spin spinning={loading}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", overflowY:"scroll", maxHeight: "70vh"}}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", overflowY: "scroll", maxHeight: "70vh" }}>
                     {events.map(event => (
                         <Card
                             key={event.title}
@@ -100,11 +100,16 @@ function EventCardLayoutV2({ userId, event_state }) {
         setLoading(true);
         setSelectedEventData(event_data);
     }
+    const [container, setContainer] = useState(null);
     return (
-        <div >
-            <Row justify="space-between" style={{ marginTop: '20px' }}>
+        <div ref={setContainer} style={{ height: "100%"}}>
+            <Row justify="space-between" style={{ marginTop: '20px'}}>
                 <Col span={4} style={{ border: "solid #A3D2CA", borderWidth: "0 1px 0 0", height: "80vh" }}>
-                    <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick} />
+                    <div>
+                        <Affix target={() => container}>
+                            <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick} />
+                        </Affix>
+                    </div>
                 </Col>
                 <Col span={20} style={{ height: "80vh", paddingLeft: "2%" }}>
                     {loading ? (

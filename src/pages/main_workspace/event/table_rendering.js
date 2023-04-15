@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
 import {QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
-
+import { v4 as uuidv4 } from 'uuid';
 
 const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
@@ -107,7 +107,8 @@ const EventDataTable = ({ event_data }) => {
     const tableIndex = newTableData.findIndex((table) => table.name === name);
     if (tableIndex > -1) {
       const newData = { ...Object.fromEntries(Object.keys(newTableData[tableIndex].data[0]).map((key) => [key, '...'])) };
-      newData.key = `${user_id}-${newTableData[tableIndex].data.length}`;
+      newData.key = `Row--${uuidv4()}`;
+      // const newTable = { id: uuidv4(), columns, data: initialData }; // add id property with UUID
       newTableData[tableIndex].data.push(newData);
       setTableData(newTableData);
       setForceUpdate(forceUpdate + 1);

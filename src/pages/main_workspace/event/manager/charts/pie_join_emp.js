@@ -2,25 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Pie } from '@ant-design/plots';
 
-const PieJoiningEmp = () => {
-  const data = [
-    {
-      type: 'Đơn vị 1',
-      value: 24,
-    },
-    {
-      type: 'Đơn vị 2',
-      value: 12,
-    },
-    {
-      type: 'Đơn vị 3',
-      value: 22,
-    },
-    {
-      type: 'Đơn vị 5',
-      value: 10,
-    },
-  ];
+const PieJoiningEmp = ({data}) => {
+  if (!data || data.length === 0) {
+    return <div>Empty chart</div>;
+  }
+  let value_sum = data.map((item) => item.value).reduce((a, b) => a + b);
+  console.log(value_sum);
   const config = {
     appendPadding: 10,
     data,
@@ -53,11 +40,15 @@ const PieJoiningEmp = () => {
           overflow: 'hidden',
           textOverflow: 'ellipsis',
         },
-        content: 'Tổng\n68',
+        content: `Tổng\n${value_sum}`,
       },
     },
   };
-  return <Pie {...config} />;
+  return <div>
+    <h2>TỔNG SỐ LƯỢT ĐĂNG KÝ THEO ĐƠN VỊ</h2>
+    <Pie {...config} />;
+
+  </div>
 };
 
 export default PieJoiningEmp;

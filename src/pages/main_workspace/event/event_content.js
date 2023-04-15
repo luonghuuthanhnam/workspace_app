@@ -43,23 +43,7 @@ const EventContent = ({ event_data }) => {
                         <EventDataTable event_data={event_data}></EventDataTable>
                     </div>
                 </Row>
-
-                {/* <Divider orientation="left">Announcement</Divider>
-                <Row style={{ marginTop: '20px' }}>
-                    <Col span={12}>
-                        <div>
-                            Anoucement
-                        </div>
-                    </Col>
-                </Row> */}
             </Col>
-            {/* <Col span={8} style={{}}>
-                <Divider orientation="left">Comments</Divider>
-                <div>
-                    <EventComment></EventComment>
-                </div>
-            </Col> */}
-
         </div>
     );
 };
