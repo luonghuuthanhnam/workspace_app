@@ -55,7 +55,7 @@ const EventDataTable = ({ event_data }) => {
       }),
     })
       .then((response) => {
-        return response.json(); // Return the promise
+        return response.json();
       })
       .then((data) => {
         if (data != null) {
@@ -68,7 +68,7 @@ const EventDataTable = ({ event_data }) => {
         console.error(error);  // Handle error
         message.error('Unable to get registed data');
       });
-  }, []); // empty dependency array to run only once
+  }, []);
 
   const cancel = (tableName) => {
     setEditingKey({ ...editingKey, [tableName]: '' });
@@ -115,7 +115,6 @@ const EventDataTable = ({ event_data }) => {
   };
 
   const FinalSave = (event_data) => {
-    // message.error('Submit function is under development');
     event_data.updated_at = new Date().toISOString();
     event_data.tables = tableData;
     fetch(`${baseURL}/event/update`, {
@@ -130,19 +129,18 @@ const EventDataTable = ({ event_data }) => {
       }),
     })
       .then((response) => {
-        return response.json(); // Return the promise
+        return response.json();
       })
       .then((data) => {
-        if (data.message === "Update event success") { // Check the message property
+        if (data.message === "Update event success") { 
           message.success('Event updated successfully');
-          // setCreateEventSuccess(true); // set createEventSuccess state variable to true on success
         }
         else {
           message.error('Unable to update event 1');
         }
       })
       .catch((error) => {
-        console.error(error);  // Handle error
+        console.error(error); 
         message.error('Unable to update event');
       });
   };
@@ -233,7 +231,7 @@ const EventDataTable = ({ event_data }) => {
           },
         ];
         
-        // Remove the 'key' column from the columns array
+
         const filteredColumns = columns.filter((column) => column.key !== 'key');
         
         const mergedColumns = filteredColumns.map((col) => {
@@ -258,7 +256,6 @@ const EventDataTable = ({ event_data }) => {
               <h2>{table.name}</h2>
               <Form form={form} component={false}>
                 <Table
-                  // key={forceUpdate} // Add this line
                   components={{
                     body: {
                       cell: EditableCell,
@@ -267,13 +264,12 @@ const EventDataTable = ({ event_data }) => {
                   dataSource={table.data}
                   columns={mergedColumns}
                   rowClassName='editable-row'
-                  pagination={{ pageSize: 10 }}
+                  pagination={{ pageSize: 25 }}
                   scroll={{ x: true }}
                 />
               </Form>
             </div>
             <Button
-              // type='primary'
               onClick={() => appendRow(table.name)}
               style={{ marginTop: '5px' }}
             >

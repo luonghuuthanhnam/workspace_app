@@ -1,4 +1,4 @@
-import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined, ScheduleOutlined, UsergroupAddOutlined, ToolOutlined } from '@ant-design/icons';
+import { FileOutlined, FundViewOutlined, DownSquareOutlined, PlusSquareOutlined, StarOutlined, ScheduleOutlined, UsergroupAddOutlined, ToolOutlined, SolutionOutlined, FundOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Affix } from 'antd';
 import { Button, ConfigProvider, Form, InputNumber } from 'antd';
 import { useState, useEffect } from 'react';
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import CreateEvent from './event/manager/create_event';
 import EventCardLayoutv2 from './event/admin/event_card';
 import ViewRegistedEvent from './event/manager/view_registed_event';
+import EventDashboard from './event/manager/event_dashboard';
+import { baseURL } from '../../config';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -25,10 +27,29 @@ function getItem(label, key, icon, children) {
 function MainWorkSpace() {
   const navigate = useNavigate();
   const handleLogout = () => {
-    console.log("logging out")
     localStorage.removeItem("userID")
     navigate('/login');
   };
+
+  useEffect(() => {
+    fetch(`${baseURL}/imployee/get_all_employee_code`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const emp_code = data
+        console.log("datadata: ", data);
+        localStorage.setItem('emp_code', JSON.stringify(emp_code));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+
 
 
   const userId = localStorage.getItem('userID');
@@ -41,7 +62,6 @@ function MainWorkSpace() {
     }
   }, [userId, navigate]);
 
-  console.log("message from mainworkspace:", userId)
   const [collapsed, setCollapsed] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState('32');
   const {
@@ -86,7 +106,7 @@ function MainWorkSpace() {
 
   const items = [
     getItem('Event', '1', <ScheduleOutlined />, [
-      getItem('Event list', '11'),
+      getItem('Event list', '11', <StarOutlined />),
       // getItem('Pendding', '12'),
       // getItem('Rejected', '13'),
       // getItem('Create', '14'),
@@ -94,28 +114,18 @@ function MainWorkSpace() {
     ),
     // getItem('Project List', '2', <DesktopOutlined />),
     getItem('Employee', '3', <UsergroupAddOutlined />, [
-      getItem('Table', '31'),
-      getItem('Chart', '32'),
+      getItem('Table', '31', <SolutionOutlined />),
+      getItem('Chart', '32', <FundOutlined />),
     ]),
-
-    // getItem('Event - Admin', '4', <UserOutlined />, [
-    //   getItem('Create Event', '41'),
-    //   getItem('Edit Event', '42'),
-    //   getItem('Remove Event', '43'),
-    //   getItem('Event Chart', '44'),
-    // ]),
   ];
 
 
   if (isAdmin) {
     items.push(
       getItem('Event - Admin', '4', <ToolOutlined />, [
-        getItem('Create Event', '41'),
-        getItem('View Registed Data', '42'),
-        getItem('Event Dashboard', '43'),
-        // getItem('Edit Event', '42'),
-        // getItem('Remove Event', '43'),
-        // getItem('Event Chart', '44'),
+        getItem('Create Event', '41', <PlusSquareOutlined />),
+        getItem('View Registed Data', '42', <DownSquareOutlined />),
+        getItem('Event Dashboard', '43', <FundViewOutlined />),
       ])
     );
   }
@@ -163,7 +173,7 @@ function MainWorkSpace() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "100%" }}>
-              <h3 style={{marginLeft: "0.8vw", color:"#FFFFFF"}}>WORKSPACE ON CLOUD</h3>
+              <h3 style={{ marginLeft: "0.8vw", color: "#FFFFFF" }}>WORKSPACE ON CLOUD</h3>
               <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Log out</Button>
             </div>
           </Header>
@@ -204,6 +214,7 @@ function MainWorkSpace() {
               {selectedMenuItem === '13' && <EventCardLayoutv2 event_state="Rejected" userId={userId} />} */}
               {selectedMenuItem === '41' && <CreateEvent user_id={userId} onCreateEventSuccess={handleCreateEventSuccess}></CreateEvent>}
               {selectedMenuItem === '42' && <ViewRegistedEvent></ViewRegistedEvent>}
+              {selectedMenuItem === '43' && <EventDashboard></EventDashboard>}
 
             </div>
           </Content>

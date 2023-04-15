@@ -9,10 +9,6 @@ import AgeDistributionChart from "./employee_age_line_chart";
 import ProvinceDistributionChart from "./employee_province_distribution";
 import { baseURL } from '../../../config';
 
-
-// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
-// const baseURL = localStorage.getItem('backed_baseURL');
-
 const EmployeeChart = () => {
     const [received_data, setReceived_data] = React.useState(null);
     const [received_pie_data, setReceived_pie_data] = React.useState(null);
@@ -39,7 +35,7 @@ const EmployeeChart = () => {
         });
     }
     return (
-        <div style ={{ height: '100%', overflow: "scroll"}}>
+        <div style={{ height: '100%', overflowY: "scroll" }}>
             <Spin spinning={loading}>
                 <div className="employee_main_div">
                     <Row justify="space-between" style={{ marginTop: '20px' }}>

@@ -16,7 +16,7 @@ const EventContent = ({ event_data }) => {
         return null
     }
     return (
-        <div style={{ display: "flex", justifyContent: "space-between", maxHeight:"100%", overflow:"scroll"}}>
+        <div style={{ display: "flex", justifyContent: "space-between", maxHeight:"100%", overflowY:"scroll"}}>
             <Col
                 // span={15} 
                 style={{ minHeight: "100%", width: "100%"}}>
