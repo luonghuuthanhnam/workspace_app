@@ -3,30 +3,7 @@ import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'an
 import {QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
 import { v4 as uuidv4 } from 'uuid';
-
-const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
+import EditableCell from './editable_cell';
 
 const EventDataTable = ({ event_data }) => {
   const user_id = localStorage.getItem('userID');
@@ -153,7 +130,7 @@ const EventDataTable = ({ event_data }) => {
     if (tableIndex > -1) {
       const rowIndex = newData[tableIndex].data.findIndex((item) => key === item.key);
   
-      if (rowIndex > -1) {
+      if (rowIndex > 0) {
         newData[tableIndex].data.splice(rowIndex, 1);
         setTableData(newData);
         setForceUpdate(forceUpdate + 1);
