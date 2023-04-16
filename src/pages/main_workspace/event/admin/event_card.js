@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'antd';
 import { type } from '@testing-library/user-event/dist/type';
-import { Affix, Table, Tag, Button, Row, Col, Spin, Popconfirm } from 'antd';
+import { Affix, Table, Tag, Button, Row, Col, Spin, Popconfirm, Popover } from 'antd';
 import EventContent from '../event_content';
 import { json } from 'react-router-dom';
 import { baseURL } from '../../../../config';
@@ -56,29 +56,28 @@ function CardList({ userId, event_state, onCardClick }) {
         onCardClick(event_data);
     }
     return (
-        <>
-            <Spin spinning={loading}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", overflowY: "scroll", maxHeight: "70vh" }}>
-                    {events.map(event => (
-                        <Card
-                            key={event.title}
-                            hoverable
-                            // cover={<img alt={event.title} src={event.cover_img_link} style={{ height: '15vh' }} />}
-                            style={{ margin: '1rem', backgroundColor: "#A3D2CA", minHeight: "10vh", width: "80%" }}
-                            onClick={() => handleInCardClick(event)}
-                        >
-                            <Meta
-                                title={<div style={{ flex: '1 0 auto' }}>{event.title}</div>}
-                                description={<div style={{ flex: '1', flexGrow: 1 }}>{event.from_date + " → " + event.to_date}</div>}
-                                style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-                            // src={event.cover_img_link} 
-                            />
-                        </Card>
-                    ))}
-
-                </div>
-            </Spin>
-        </>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", height: "100%", width: "100%" }}>
+                <Spin spinning={loading} style={{width:"100%", height:"100%"}}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", height: "100%", width: "100%"}}>
+                        {events.map(event => (
+                            <Popover content={event.description} title={event.title} placement="right">
+                            <Card
+                                key={event.title}
+                                hoverable
+                                style={{ margin: '1rem', backgroundColor: 'rgba(163, 210, 202, 0.3)', minHeight: "10vh", width: "12vw" }}
+                                onClick={() => handleInCardClick(event)}
+                            >
+                                <Meta
+                                    title={<div style={{ flex: '1 0 auto' }}>{event.title}</div>}
+                                    description={<div style={{ flex: '1', flexGrow: 1 }}>{event.from_date + " → " + event.to_date}</div>}
+                                    style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+                                />
+                            </Card>
+                            </Popover>
+                        ))}
+                    </div>
+                </Spin>
+            </div>
     );
 };
 
@@ -94,24 +93,20 @@ function EventCardLayoutV2({ userId, event_state }) {
         }
     }, [loading]);
 
-
     const handleCardClick = (event_data) => {
-        console.log("event_data ne: ", event_data)
         setLoading(true);
         setSelectedEventData(event_data);
     }
     const [container, setContainer] = useState(null);
     return (
-        <div ref={setContainer} style={{ height: "100%"}}>
-            <Row justify="space-between" style={{ marginTop: '20px'}}>
-                <Col span={4} style={{ border: "solid #A3D2CA", borderWidth: "0 1px 0 0", height: "80vh" }}>
-                    <div>
-                        <Affix target={() => container}>
-                            <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick} />
-                        </Affix>
+        <div ref={setContainer} style={{ height: "100%" }}>
+            <Row justify="space-between" style={{ marginTop: '20px', height: "100%"}}>
+                <Col span={5} style={{ border: "solid #A3D2CA", borderWidth: "0 1px 0 0", height: "100%"}}>
+                    <div style={{ width: "100%", height: "100%", overflowY: "scroll"}}>
+                        <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick}/>
                     </div>
                 </Col>
-                <Col span={20} style={{ height: "80vh", paddingLeft: "2%" }}>
+                <Col span={18} style={{ height: "80vh", paddingLeft: "2%", width: "60vw" }}>
                     {loading ? (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "100%" }}>
                             <Spin size="large" />

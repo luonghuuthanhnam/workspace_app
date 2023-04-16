@@ -56,8 +56,8 @@ const columns = [
       render: (_, { gioitinh }) => (
         <>
           {
-                  <Tag color={gioitinh === 'Nam' ? 'blue' : 'red'} key={gioitinh}>
-                  {gioitinh.toUpperCase()}
+                  <Tag color={gioitinh.toUpperCase() === 'NAM' ? 'blue' : 'red'} key={gioitinh}>
+                  {gioitinh.toUpperCase() === 'NAM' ? 'Nam' : 'Nữ'}
                   </Tag>
           }
         </>
@@ -69,17 +69,17 @@ const columns = [
       key: 'ngayvao_congdoan',
       width: "9%",
     },
-    {
-      title: 'Thao tác',
-      key: 'action',
-      width: "12%",
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Sửa {record.name}</a>
-          <a style={{color: "#cf1322"}}>Xóa</a>
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Thao tác',
+    //   key: 'action',
+    //   width: "12%",
+    //   render: (_, record) => (
+    //     <Space size="middle">
+    //       <a>Sửa {record.name}</a>
+    //       <a style={{color: "#cf1322"}}>Xóa</a>
+    //     </Space>
+    //   ),
+    // },
   ];
 
 export default columns

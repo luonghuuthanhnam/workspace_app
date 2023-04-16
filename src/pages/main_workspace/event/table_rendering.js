@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
-import {QuestionCircleOutlined } from '@ant-design/icons';
+import { Table, Input, InputNumber, Popconfirm, Form, Button, message, Collapse } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
 import { v4 as uuidv4 } from 'uuid';
 import EditableCell from './editable_cell';
 
 const EventDataTable = ({ event_data }) => {
+  const { Panel } = Collapse;
   const user_id = localStorage.getItem('userID');
   const group_id = localStorage.getItem('group_id');
   const [form] = Form.useForm();
@@ -110,7 +111,7 @@ const EventDataTable = ({ event_data }) => {
         return response.json();
       })
       .then((data) => {
-        if (data.message === "Update event success") { 
+        if (data.message === "Update event success") {
           message.success('Event updated successfully');
         }
         else {
@@ -118,7 +119,7 @@ const EventDataTable = ({ event_data }) => {
         }
       })
       .catch((error) => {
-        console.error(error); 
+        console.error(error);
         message.error('Unable to update event');
       });
   };
@@ -126,10 +127,10 @@ const EventDataTable = ({ event_data }) => {
   const handleDelete = (key, tableName) => {
     const newData = [...tableData];
     const tableIndex = newData.findIndex((table) => table.name === tableName);
-  
+
     if (tableIndex > -1) {
       const rowIndex = newData[tableIndex].data.findIndex((item) => key === item.key);
-  
+
       if (rowIndex > 0) {
         newData[tableIndex].data.splice(rowIndex, 1);
         setTableData(newData);
@@ -192,7 +193,7 @@ const EventDataTable = ({ event_data }) => {
                         }
                         onConfirm={() => handleDelete(record.key, table.name)}
                       >
-                        <a type='primary' style={{color:'#E96767'}} >Delete</a>
+                        <a type='primary' style={{ color: '#E96767' }} >Delete</a>
                       </Popconfirm>
                     </span>
                   ) : (
@@ -200,7 +201,7 @@ const EventDataTable = ({ event_data }) => {
                       <Button type='primary' disabled={false} onClick={() => edit(record, table.name)} style={{ marginRight: 8 }}>
                         Edit
                       </Button>
-                      
+
                     </span>
                   )}
                 </span>
@@ -208,10 +209,10 @@ const EventDataTable = ({ event_data }) => {
             },
           },
         ];
-        
+
 
         const filteredColumns = columns.filter((column) => column.key !== 'key');
-        
+
         const mergedColumns = filteredColumns.map((col) => {
           if (!col.editable) {
             return col;
@@ -229,31 +230,35 @@ const EventDataTable = ({ event_data }) => {
         });
 
         return (
-          <div key={`${table.name}-${forceUpdate}`} style={{ textAlign: 'right', marginTop: "1vh" }} >
-            <div style={{ textAlign: 'left' }}>
-              <h2>{table.name}</h2>
-              <Form form={form} component={false}>
-                <Table
-                  components={{
-                    body: {
-                      cell: EditableCell,
-                    },
-                  }}
-                  dataSource={table.data}
-                  columns={mergedColumns}
-                  rowClassName='editable-row'
-                  pagination={{ pageSize: 25 }}
-                  scroll={{ x: true }}
-                />
-              </Form>
-            </div>
-            <Button
-              onClick={() => appendRow(table.name)}
-              style={{ marginTop: '5px' }}
-            >
-              Append
-            </Button>
-          </div>
+          <Collapse size="large" style={{marginTop:"2vh"}}>
+            <Panel header={table.name} key="1">
+              <div key={`${table.name}-${forceUpdate}`} style={{ textAlign: 'right', marginTop: "1vh" }} >
+                <div style={{ textAlign: 'left' }}>
+                  {/* <h2>{table.name}</h2> */}
+                  <Form form={form} component={false}>
+                    <Table
+                      components={{
+                        body: {
+                          cell: EditableCell,
+                        },
+                      }}
+                      dataSource={table.data}
+                      columns={mergedColumns}
+                      rowClassName='editable-row'
+                      pagination={{ pageSize: 25 }}
+                      scroll={{ x: true }}
+                    />
+                  </Form>
+                </div>
+                <Button
+                  onClick={() => appendRow(table.name)}
+                  style={{ marginTop: '5px' }}
+                >
+                  Append
+                </Button>
+              </div>
+            </Panel>
+          </Collapse>
         );
       })}
       <div style={{ width: "100%", textAlign: "center" }}>
