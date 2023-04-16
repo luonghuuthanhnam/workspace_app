@@ -16,7 +16,7 @@ const EventContent = ({ event_data }) => {
         return null
     }
     return (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", maxHeight:"100%", overflowY:"scroll"}}>
             <Col
                 // span={15} 
                 style={{ minHeight: "100%", width: "100%"}}>
@@ -25,10 +25,10 @@ const EventContent = ({ event_data }) => {
                 </Row>
                 <Row style={{ marginTop: '20px', height: "4vh", marginLeft: "1vw" }}>
                     <Col span={4} style={{ borderBottom: "1px", alignItems: "center", display: "flex" }}>
-                        <Tag color="#A3D2CA" style={{ fontSize: "2vh" }}>From: {event_data.from_date}</Tag>
+                        <Tag color="#A3D2CA" style={{padding:"5px 10px", fontSize: "2vh" }}>From: {event_data.from_date}</Tag>
                     </Col>
-                    <Col span={4} style={{ marginLeft: "2vw", alignItems: "center", display: "flex" }}>
-                        <Tag color="#f50" style={{ fontSize: "2vh" }}>To: {event_data.to_date}</Tag>
+                    <Col span={4} style={{marginLeft: "2vw", alignItems: "center", display: "flex" }}>
+                        <Tag color="#E96767" style={{padding:"5px 10px", fontSize: "2vh" }}>To: {event_data.to_date}</Tag>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: '20px', height: "15vh" }}>
@@ -43,23 +43,7 @@ const EventContent = ({ event_data }) => {
                         <EventDataTable event_data={event_data}></EventDataTable>
                     </div>
                 </Row>
-
-                {/* <Divider orientation="left">Announcement</Divider>
-                <Row style={{ marginTop: '20px' }}>
-                    <Col span={12}>
-                        <div>
-                            Anoucement
-                        </div>
-                    </Col>
-                </Row> */}
             </Col>
-            {/* <Col span={8} style={{}}>
-                <Divider orientation="left">Comments</Divider>
-                <div>
-                    <EventComment></EventComment>
-                </div>
-            </Col> */}
-
         </div>
     );
 };

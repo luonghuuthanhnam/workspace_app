@@ -1,34 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Input, InputNumber, Popconfirm, Form, Button, message } from 'antd';
+import {QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
-
-
-const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
+import { v4 as uuidv4 } from 'uuid';
+import EditableCell from './editable_cell';
 
 const EventDataTable = ({ event_data }) => {
   const user_id = localStorage.getItem('userID');
+  const group_id = localStorage.getItem('group_id');
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState({});
   const [tableData, setTableData] = useState(event_data.tables);
@@ -49,14 +28,15 @@ const EventDataTable = ({ event_data }) => {
       },
       body: JSON.stringify({
         "event_id": event_data.id,
-        "user_id": user_id,
+        "group_id": group_id,
       }),
     })
       .then((response) => {
-        return response.json(); // Return the promise
+        return response.json();
       })
       .then((data) => {
         if (data != null) {
+          console.log('registed data', data)
           const registed_table_data = data;
           setTableData(registed_table_data);
         }
@@ -65,7 +45,7 @@ const EventDataTable = ({ event_data }) => {
         console.error(error);  // Handle error
         message.error('Unable to get registed data');
       });
-  }, []); // empty dependency array to run only once
+  }, []);
 
   const cancel = (tableName) => {
     setEditingKey({ ...editingKey, [tableName]: '' });
@@ -104,7 +84,8 @@ const EventDataTable = ({ event_data }) => {
     const tableIndex = newTableData.findIndex((table) => table.name === name);
     if (tableIndex > -1) {
       const newData = { ...Object.fromEntries(Object.keys(newTableData[tableIndex].data[0]).map((key) => [key, '...'])) };
-      newData.key = `${user_id}-${newTableData[tableIndex].data.length}`;
+      newData.key = `Row--${uuidv4()}`;
+      // const newTable = { id: uuidv4(), columns, data: initialData }; // add id property with UUID
       newTableData[tableIndex].data.push(newData);
       setTableData(newTableData);
       setForceUpdate(forceUpdate + 1);
@@ -112,10 +93,8 @@ const EventDataTable = ({ event_data }) => {
   };
 
   const FinalSave = (event_data) => {
-    message.error('Submit function is under development');
-    console.log('Final ', event_data);
     event_data.updated_at = new Date().toISOString();
-
+    event_data.tables = tableData;
     fetch(`${baseURL}/event/update`, {
       method: 'POST',
       headers: {
@@ -124,25 +103,39 @@ const EventDataTable = ({ event_data }) => {
       body: JSON.stringify({
         "event_data": event_data,
         "user_id": user_id,
+        "group_id": group_id,
       }),
     })
       .then((response) => {
-        return response.json(); // Return the promise
+        return response.json();
       })
       .then((data) => {
-        console.log(data);
-        if (data.message === "Create event success") { // Check the message property
-          message.success('Event created successfully');
-          // setCreateEventSuccess(true); // set createEventSuccess state variable to true on success
+        if (data.message === "Update event success") { 
+          message.success('Event updated successfully');
         }
         else {
-          message.error('Unable to create event');
+          message.error('Unable to update event 1');
         }
       })
       .catch((error) => {
-        console.error(error);  // Handle error
-        message.error('Unable to create event');
+        console.error(error); 
+        message.error('Unable to update event');
       });
+  };
+
+  const handleDelete = (key, tableName) => {
+    const newData = [...tableData];
+    const tableIndex = newData.findIndex((table) => table.name === tableName);
+  
+    if (tableIndex > -1) {
+      const rowIndex = newData[tableIndex].data.findIndex((item) => key === item.key);
+  
+      if (rowIndex > 0) {
+        newData[tableIndex].data.splice(rowIndex, 1);
+        setTableData(newData);
+        setForceUpdate(forceUpdate + 1);
+      }
+    }
   };
 
   return (
@@ -172,31 +165,51 @@ const EventDataTable = ({ event_data }) => {
             )),
           })),
           {
-            title: 'Operation',
+            title: 'Tùy chỉnh',
             dataIndex: 'operation',
             fixed: 'right',
-            width: 80,
+            // width: 120,
             render: (_, record) => {
               const editable = isEditing(record, table.name);
-              return editable ? (
+              return (
                 <span>
-                  <a onClick={() => save(record.key, table.name)} style={{ marginRight: 8 }}>
-                    Save
-                  </a>
-                  <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(table.name)}>
-                    <a>Cancel</a>
-                  </Popconfirm>
+                  {editable ? (
+                    <span>
+                      <a onClick={() => save(record.key, table.name)} style={{ marginRight: 8 }}>
+                        Save
+                      </a>
+                      <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(table.name)}>
+                        <a style={{ marginRight: 8 }} >Cancel</a>
+                      </Popconfirm>
+                      <Popconfirm
+                        title="Are you sure DELETE this row?"
+                        icon={
+                          <QuestionCircleOutlined
+                            style={{
+                              color: 'red',
+                            }}
+                          />
+                        }
+                        onConfirm={() => handleDelete(record.key, table.name)}
+                      >
+                        <a type='primary' style={{color:'#E96767'}} >Delete</a>
+                      </Popconfirm>
+                    </span>
+                  ) : (
+                    <span>
+                      <Button type='primary' disabled={false} onClick={() => edit(record, table.name)} style={{ marginRight: 8 }}>
+                        Edit
+                      </Button>
+                      
+                    </span>
+                  )}
                 </span>
-              ) : (
-                <a disabled={false} onClick={() => edit(record, table.name)}>
-                  Edit
-                </a>
               );
             },
           },
         ];
         
-        // Remove the 'key' column from the columns array
+
         const filteredColumns = columns.filter((column) => column.key !== 'key');
         
         const mergedColumns = filteredColumns.map((col) => {
@@ -221,7 +234,6 @@ const EventDataTable = ({ event_data }) => {
               <h2>{table.name}</h2>
               <Form form={form} component={false}>
                 <Table
-                  // key={forceUpdate} // Add this line
                   components={{
                     body: {
                       cell: EditableCell,
@@ -230,13 +242,12 @@ const EventDataTable = ({ event_data }) => {
                   dataSource={table.data}
                   columns={mergedColumns}
                   rowClassName='editable-row'
-                  pagination={{ pageSize: 10 }}
+                  pagination={{ pageSize: 25 }}
                   scroll={{ x: true }}
                 />
               </Form>
             </div>
             <Button
-              // type='primary'
               onClick={() => appendRow(table.name)}
               style={{ marginTop: '5px' }}
             >
