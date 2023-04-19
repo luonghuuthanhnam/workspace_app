@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Input, InputNumber, Popconfirm, Form, Button, message, Collapse } from 'antd';
+import { Table, Input, Popconfirm, Form, Button, message, Collapse } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
 import { v4 as uuidv4 } from 'uuid';
@@ -43,7 +43,7 @@ const EventDataTable = ({ event_data }) => {
         }
       })
       .catch((error) => {
-        console.error(error);  // Handle error
+        console.error(error);
         message.error('Unable to get registed data');
       });
   }, []);
@@ -70,7 +70,6 @@ const EventDataTable = ({ event_data }) => {
           newData[tableIndex].data.push(row);
           console.log('new data', newData);
           setTableData(newData);
-
         }
       }
       setEditingKey({ ...editingKey, [tableName]: '' });
@@ -86,7 +85,6 @@ const EventDataTable = ({ event_data }) => {
     if (tableIndex > -1) {
       const newData = { ...Object.fromEntries(Object.keys(newTableData[tableIndex].data[0]).map((key) => [key, '...'])) };
       newData.key = `Row--${uuidv4()}`;
-      // const newTable = { id: uuidv4(), columns, data: initialData }; // add id property with UUID
       newTableData[tableIndex].data.push(newData);
       setTableData(newTableData);
       setForceUpdate(forceUpdate + 1);
@@ -113,8 +111,7 @@ const EventDataTable = ({ event_data }) => {
       .then((data) => {
         if (data.message === "Update event success") {
           message.success('Event updated successfully');
-        }
-        else {
+        } else {
           message.error('Unable to update event 1');
         }
       })
@@ -140,7 +137,7 @@ const EventDataTable = ({ event_data }) => {
   };
 
   return (
-    <>
+    <div style={{paddingBottom: "2vh"}}>
       {tableData.map((table) => {
         const columns = [
           ...Object.keys(table.data[0] || {}).map((key) => ({
@@ -230,7 +227,7 @@ const EventDataTable = ({ event_data }) => {
         });
 
         return (
-          <Collapse size="large" style={{marginTop:"2vh"}}>
+          <Collapse size="large" style={{ marginTop: "2vh" }}>
             <Panel header={table.name} key="1">
               <div key={`${table.name}-${forceUpdate}`} style={{ textAlign: 'right', marginTop: "1vh" }} >
                 <div style={{ textAlign: 'left' }}>
@@ -270,7 +267,7 @@ const EventDataTable = ({ event_data }) => {
           SUBMIT
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 export default EventDataTable;

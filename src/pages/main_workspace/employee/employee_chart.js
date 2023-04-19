@@ -34,8 +34,9 @@ const EmployeeChart = () => {
             setLoading(false);
         });
     }
+    
     return (
-        <div style={{ height: '100%', overflowY: "scroll" }}>
+        <div style={{ height: '100%', overflowY: "scroll", backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
             <Spin spinning={loading}>
                 <div className="employee_main_div">
                     <Row justify="space-between" style={{ marginTop: '20px' }}>

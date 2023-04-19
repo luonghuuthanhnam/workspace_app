@@ -164,7 +164,7 @@ const ViewRegistedEvent = () => {
     };
     const [container, setContainer] = useState(null);
     return (
-        <div style={{height: "100%", overflowY:"scroll"}} ref={setContainer}>
+        <div style={{height: "100%", overflowY:"auto", backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"2%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}} ref={setContainer}>
             <Select
                 placeholder="Select an event"
                 onChange={handleEventSelect}

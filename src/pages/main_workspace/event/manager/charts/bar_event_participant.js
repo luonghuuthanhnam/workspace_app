@@ -69,7 +69,7 @@ const ColumnEventParticipant = ({data}) => {
       },
     },
   };
-  return <Column {...config} />;
+  return <Column {...config} />
 };
 
 export default ColumnEventParticipant;

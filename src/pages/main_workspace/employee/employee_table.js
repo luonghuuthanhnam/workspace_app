@@ -28,7 +28,7 @@ const EmployeeTable = () => {
   return (
     <>
     <Spin spinning={loading}>
-      <div className="employee_main_div">
+      <div className="employee_main_div" style={{backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
         <Table
           className='employee_table'
           columns={columns}

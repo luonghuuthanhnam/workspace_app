@@ -46,7 +46,7 @@ const PieJoiningEmp = ({data}) => {
   };
   return <div style={{textAlign:"left"}}>
     <h2>TỔNG SỐ LƯỢT ĐĂNG KÝ THEO ĐƠN VỊ</h2>
-    <Pie {...config} />;
+    <Pie {...config} />
 
   </div>
 };

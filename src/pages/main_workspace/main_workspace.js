@@ -12,6 +12,7 @@ import EventCardLayoutv2 from './event/admin/event_card';
 import ViewRegistedEvent from './event/manager/view_registed_event';
 import EventDashboard from './event/manager/event_dashboard';
 import { baseURL } from '../../config';
+import UploadForm from './upload/upload_form';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -128,6 +129,8 @@ function MainWorkSpace() {
         getItem('Event Dashboard', '43', <FundViewOutlined />),
       ])
     );
+    items.push(
+      getItem("Upload File", "5", <FileOutlined />));
   }
 
   function handleCreateEventSuccess() {
@@ -203,8 +206,10 @@ function MainWorkSpace() {
               style={{
                 padding: 15,
                 height: "92%",
+               width: "100%",
                 // height: ,
-                background: colorBgContainer,
+                // background: colorBgContainer,
+                background: "#F5F5F5"
               }}
             >
               {selectedMenuItem === '31' && <EmployeeTable />}
@@ -215,6 +220,7 @@ function MainWorkSpace() {
               {selectedMenuItem === '41' && <CreateEvent user_id={userId} onCreateEventSuccess={handleCreateEventSuccess}></CreateEvent>}
               {selectedMenuItem === '42' && <ViewRegistedEvent></ViewRegistedEvent>}
               {selectedMenuItem === '43' && <EventDashboard></EventDashboard>}
+              {selectedMenuItem === '5' &&  <UploadForm></UploadForm>}
 
             </div>
           </Content>
