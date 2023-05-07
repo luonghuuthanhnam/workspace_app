@@ -34,7 +34,7 @@ const EventDashboard = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("data: ", data)
+                // console.log("data: ", data)
                 setGroup_options(data);
             })
             .catch((error) => { });
@@ -42,6 +42,7 @@ const EventDashboard = () => {
 
 
     useEffect(() => {
+        // console.log("useEffect")
         fetch(`${baseURL}/event/query_total_stat_dashboard`, {
             method: 'GET',
             headers: {
@@ -50,7 +51,7 @@ const EventDashboard = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log("data: ", data)
+                // console.log("data: ", data)
                 setTotal_stat(data);
                 setPie_join_emp_data(data.emp_joining_by_group);
                 setCol_event_each_group_data(data.event_joining_by_group)
@@ -60,18 +61,78 @@ const EventDashboard = () => {
 
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
     }, []);
+
+    const handleEntitySelectionChange = (value) => {
+        // console.log("Selected group_id:", value);
+        if(value === "defautl_all_department"){
+            fetch(`${baseURL}/event/query_total_stat_dashboard`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    // console.log("data: ", data)
+                    setTotal_stat(data);
+                    setPie_join_emp_data(data.emp_joining_by_group);
+                    setCol_event_each_group_data(data.event_joining_by_group)
+                    setMvp_group_emp_joining(data.mvp_emp_joining_group);
+                    setMvp_emp(data.top_3_emp_data);
+                    setLoading(false);
+    
+                })
+                .catch((error) => {
+                    // console.log(error);
+                });
+        }
+        else{
+        fetch(`${baseURL}/event/query_department_stat_dashboard`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "event_id": "",
+                "group_id": value,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // // console.log("data: ", data)
+                setTotal_stat(data);
+                setPie_join_emp_data(data.emp_joining_by_group);
+                setCol_event_each_group_data(data.event_joining_by_group)
+                setMvp_group_emp_joining(data.mvp_emp_joining_group);
+                setMvp_emp(data.top_3_emp_data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                // console.log(error);
+                setTotal_stat(null);
+                setPie_join_emp_data(null);
+                setCol_event_each_group_data(null)
+                setMvp_group_emp_joining(null);
+                setMvp_emp(null);
+                setLoading(false);
+            });
+      };
+    }
+    const handlePeriodSelectionChange = (value) => {
+        console.log("period: ", value);
+    }
     return (
         <div style={{ height: "100%", width: "100%", overflowY: "scroll", backgroundColor: 'rgba(255, 255, 255, 0)'}}>
             <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
                 <Row style={{ height: "100%", width: "100%", marginBottom: "3vh", justifyContent: "space-between"}}>
                     <Col style={{ minHeight: "100%", minWidth:"48%" , backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "1%", textAlign:"center", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
-                        <EntitySelection options={group_options}></EntitySelection>
+                        <EntitySelection options={group_options} onSelectionChange={handleEntitySelectionChange} />
                     </Col>
                     <Col style={{ minHeight: "100%", minWidth:"48%" , backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "0.5%" , textAlign:"center", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
-                        <PeriodSelection></PeriodSelection>
+                        <PeriodSelection onPeriodChange={handlePeriodSelectionChange}></PeriodSelection>
                     </Col>
                 </Row>
             </div>

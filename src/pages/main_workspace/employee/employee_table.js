@@ -1,13 +1,11 @@
 import React from "react";
-import { Space, Table, Tag, Button, Spin } from 'antd';
+import {Spin } from 'antd';
 import columns from './employee_columns';
 import axios from 'axios';
 import { Pie, measureTextWidth } from '@ant-design/plots';
 import EmployeePieChart from "./employee_pie";
+import EditableTable from "../../../components/EditableTable/editable_table";
 import { baseURL } from '../../../config';
-
-// const baseURL = "https://sophisticated-incredible-ostrich.glitch.me/";
-// const baseURL = localStorage.getItem('backed_baseURL');
 
 const EmployeeTable = () => {
   const [received_data, setReceived_data] = React.useState(null);
@@ -25,25 +23,15 @@ const EmployeeTable = () => {
       setLoading(false);
     });
   }
+  // console.log("received_data:", received_data);
   return (
-    <>
-    <Spin spinning={loading}>
-      <div className="employee_main_div" style={{backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
-        <Table
-          className='employee_table'
-          columns={columns}
-          dataSource={received_data}
-          pagination={{
-            pageSize: 25,
-          }}
-          scroll={{
-            y: "70vh",
-            x: "75vw"
-          }}
-        />
-      </div>
-    </Spin>
-    </>
+    <div style={{ height: "100%", width: "100%",backgroundColor: "#FFFFFF", overflowY: "auto", borderRadius: "1vw", padding: "1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)" }}>
+      <Spin style={{ height: "100%", width: "100%", overflowY: "auto"}} spinning={loading}>
+        {/* <div className="employee_main_div" style={{maxHeight:"100%"}}> */}
+          <EditableTable emp_data={received_data}></EditableTable>
+        {/* </div> */}
+      </Spin>
+    </div>
   );
 };
 export default EmployeeTable;

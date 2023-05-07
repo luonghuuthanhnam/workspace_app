@@ -28,7 +28,7 @@ const EntityLabelComponent = ({ label, value }) => {
 };
 
 
-const EntitySelection = ({ options }) => {
+const EntitySelection = ({ options, onSelectionChange }) => {
     if (!options) return null;
     console.log(options, "options")
     const defaultOption = {
@@ -41,7 +41,11 @@ const EntitySelection = ({ options }) => {
             <div style={{ width: "100%", overflowX: "auto" }}>
                 <Segmented block
                     options={optionsWithDefault.map((item) => EntityLabelComponent({ label:item["group_name"], value: item["group_id"] }))}
-                    onChange={(value) => {console.log("Selected:", value)}}
+                    onChange={(value) => {
+                        console.log("Selected:", value);
+                        // call the callback function with the selected group_id value
+                        onSelectionChange(value);
+                      }}
                 />
             </div>
         </Space>

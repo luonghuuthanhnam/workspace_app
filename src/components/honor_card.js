@@ -20,8 +20,8 @@ const HonorCard = ({ title, honoree, description, unit}) => {
             <span style={{marginLeft:"3%", fontSize: "1.2em", fontWeight: "normal", fontStyle: "oblique"}}>{`(${description[1]} ${unit})`}</span>
         </Row>
         <Row style={{display: "flex", alignItems:"baseline"}}>
-            <span style={{ fontSize: "0.9vw", fontWeight: "normal"}}>{honoree[2]}</span>
-            <span style={{marginLeft:"3%", fontSize: "0.9em", fontWeight: "normal", fontStyle: "oblique"}}>{`(${description[2]} ${unit})`}</span>
+            <span style={{ fontSize: "1.1vw", fontWeight: "normal"}}>{honoree[2]}</span>
+            <span style={{marginLeft:"3%", fontSize: "1.2em", fontWeight: "normal", fontStyle: "oblique"}}>{`(${description[2]} ${unit})`}</span>
         </Row>
     </Card>
 );
