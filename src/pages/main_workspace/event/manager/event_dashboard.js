@@ -19,6 +19,8 @@ const EventDashboard = () => {
     const [mvp_group_emp_joining, setMvp_group_emp_joining] = useState(null);
     const [mvp_emp, setMvp_emp] = useState(null);
     const [group_options, setGroup_options] = useState(null);
+    const [selected_period, setSelected_period] = useState(["All"]);
+    const [selected_entity, setSelected_entity] = useState("defautl_all_department");
     const user_id = localStorage.getItem('userID');
 
     const [loading, setLoading] = React.useState(true); // Add loading state
@@ -44,10 +46,15 @@ const EventDashboard = () => {
     useEffect(() => {
         // console.log("useEffect")
         fetch(`${baseURL}/event/query_total_stat_dashboard`, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+                "user_id": user_id,
+                "group_id": "defautl_all_department",
+                "time_range": selected_period,
+            }),
         })
             .then((response) => response.json())
             .then((data) => {
@@ -65,80 +72,138 @@ const EventDashboard = () => {
             });
     }, []);
 
+    useEffect(() => {
+        const request_stat = () => {
+            if (selected_entity === "defautl_all_department") {
+                fetch(`${baseURL}/event/query_total_stat_dashboard`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "user_id": user_id,
+                        "group_id": selected_entity,
+                        "time_range": selected_period,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // console.log("data: ", data)
+                        setTotal_stat(data);
+                        setPie_join_emp_data(data.emp_joining_by_group);
+                        setCol_event_each_group_data(data.event_joining_by_group)
+                        setMvp_group_emp_joining(data.mvp_emp_joining_group);
+                        setMvp_emp(data.top_3_emp_data);
+                        setLoading(false);
+
+                    })
+                    .catch((error) => {
+                        // console.log(error);
+                    });
+            }
+            else {
+                fetch(`${baseURL}/event/query_department_stat_dashboard`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "user_id": user_id,
+                        "group_id": selected_entity,
+                        "time_range": selected_period,
+                    }),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // // console.log("data: ", data)
+                        setTotal_stat(data);
+                        setPie_join_emp_data(data.emp_joining_by_group);
+                        setCol_event_each_group_data(data.event_joining_by_group)
+                        setMvp_group_emp_joining(data.mvp_emp_joining_group);
+                        setMvp_emp(data.top_3_emp_data);
+                        setLoading(false);
+                    })
+                    .catch((error) => {
+                        // console.log(error);
+                        setTotal_stat(null);
+                        setPie_join_emp_data(null);
+                        setCol_event_each_group_data(null)
+                        setMvp_group_emp_joining(null);
+                        setMvp_emp(null);
+                        setLoading(false);
+                    });
+            };
+        }
+        request_stat();
+    }, [selected_entity, selected_period]);
+
     const handleEntitySelectionChange = (value) => {
         // console.log("Selected group_id:", value);
-        if(value === "defautl_all_department"){
-            fetch(`${baseURL}/event/query_total_stat_dashboard`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    // console.log("data: ", data)
-                    setTotal_stat(data);
-                    setPie_join_emp_data(data.emp_joining_by_group);
-                    setCol_event_each_group_data(data.event_joining_by_group)
-                    setMvp_group_emp_joining(data.mvp_emp_joining_group);
-                    setMvp_emp(data.top_3_emp_data);
-                    setLoading(false);
-    
-                })
-                .catch((error) => {
-                    // console.log(error);
-                });
-        }
-        else{
-        fetch(`${baseURL}/event/query_department_stat_dashboard`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "event_id": "",
-                "group_id": value,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                // // console.log("data: ", data)
-                setTotal_stat(data);
-                setPie_join_emp_data(data.emp_joining_by_group);
-                setCol_event_each_group_data(data.event_joining_by_group)
-                setMvp_group_emp_joining(data.mvp_emp_joining_group);
-                setMvp_emp(data.top_3_emp_data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                // console.log(error);
-                setTotal_stat(null);
-                setPie_join_emp_data(null);
-                setCol_event_each_group_data(null)
-                setMvp_group_emp_joining(null);
-                setMvp_emp(null);
-                setLoading(false);
-            });
-      };
+        setSelected_entity(value);
+        // request_stat();
     }
     const handlePeriodSelectionChange = (value) => {
         console.log("period: ", value);
+        if (value === "All") {
+            setSelected_period(["All"]);
+        }
+        else {
+            console.log("value: ", value);
+            let time_range = [];
+            if (value.includes("Q")) {
+                let year = value.split("-")[0];
+                let quarter = value.split("-")[1];
+                if (quarter === "Q1") {
+                    time_range = [year + "-01-01", year + "-04-01"];
+                }
+                else if (quarter === "Q2") {
+                    time_range = [year + "-04-01", year + "-07-01"];
+                }
+                else if (quarter === "Q3") {
+                    time_range = [year + "-07-01", year + "-10-01"];
+                }
+                else if (quarter === "Q4") {
+                    time_range = [year + "-10-01", year + 1 + "-01-01"];
+                }
+            }
+            else if (value.includes("-") && !Array.isArray(value)) {
+                let year = parseInt(value.split("-")[0]);
+                let month = parseInt(value.split("-")[1]);
+                if (month != 12) {
+                    // month = month.toString().padStart(2, "0"); // pad the month value with "0" until it reaches a length of 2 characters
+                    time_range = [year + "-" + month.toString().padStart(2, "0") + "-01", year + "-" + (month + 1).toString().padStart(2, "0") + "-01"];
+                    console.log("test: ", time_range);
+                }
+                else {
+                    time_range = [year + "-" + month.toString().padStart(2, "0") + "-01", (year + 1) + "-01-01"];
+                }
+            }
+            else if (Array.isArray(value)) {
+                time_range = [value[0], value[1]];
+            }
+            else if (!value.includes("-")) {
+                time_range = [value + "-01-01", parseInt(value) + 1 + "-01-01"];
+            }
+            setSelected_period(time_range);
+            console.log("setSelected_period: ", time_range);
+        }
+
     }
     return (
-        <div style={{ height: "100%", width: "100%", overflowY: "scroll", backgroundColor: 'rgba(255, 255, 255, 0)'}}>
+        <div style={{ height: "100%", width: "100%", overflowY: "scroll", backgroundColor: 'rgba(255, 255, 255, 0)' }}>
             <div style={{ display: "flex", flexWrap: "wrap", width: "100%" }}>
-                <Row style={{ height: "100%", width: "100%", marginBottom: "3vh", justifyContent: "space-between"}}>
-                    <Col style={{ minHeight: "100%", minWidth:"48%" , backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "1%", textAlign:"center", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
+                <Row style={{ height: "100%", width: "100%", marginBottom: "3vh", justifyContent: "space-between" }}>
+                    <Col style={{ minHeight: "100%", minWidth: "48%", backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "1%", textAlign: "center", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)" }}>
                         <EntitySelection options={group_options} onSelectionChange={handleEntitySelectionChange} />
                     </Col>
-                    <Col style={{ minHeight: "100%", minWidth:"48%" , backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "0.5%" , textAlign:"center", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
+                    <Col style={{ minHeight: "100%", minWidth: "48%", backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "0.5%", textAlign: "center", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)" }}>
                         <PeriodSelection onPeriodChange={handlePeriodSelectionChange}></PeriodSelection>
                     </Col>
                 </Row>
             </div>
-            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "2% 1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)", marginBottom: "2vh"}}>
+            <div style={{ backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "2% 1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)", marginBottom: "2vh" }}>
                 <Spin spinning={loading}>
-                    <div style={{ display: "flex", justifyContent: "center"}}>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
                         <Row style={{ justifyContent: "space-evenly", borderRadius: "1vw", width: "100%" }}>
                             <Col span={5} >
                                 <StatCard title="Tổng sự kiện:" value={total_stat != null ? total_stat.total_event : "N/A"} unit="sự kiện" color="#e96767" prefix_icon={<TrophyOutlined style={{ marginRight: "0.6vw" }} />} />

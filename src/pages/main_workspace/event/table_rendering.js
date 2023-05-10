@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Popconfirm, Form, Button, message, Collapse } from 'antd';
+import { Table, Input, Popconfirm, Form, Button, message, Collapse, Modal, Select, Tag, Row } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { baseURL } from '../../../config';
 import { v4 as uuidv4 } from 'uuid';
-import EditableCell from './editable_cell';
+const { Option } = Select;
 
 const EventDataTable = ({ event_data }) => {
   const { Panel } = Collapse;
   const user_id = localStorage.getItem('userID');
   const group_id = localStorage.getItem('group_id');
   const [form] = Form.useForm();
-  const [editingKey, setEditingKey] = useState({});
   const [tableData, setTableData] = useState(event_data.tables);
-  const [forceUpdate, setForceUpdate] = useState(0);
+  const [selectedRowKey, setSelectedRowKey] = useState("");
+  const [selectedTableID, setSelectedTableID] = useState(null);
+  const [isAddNew, setIsAddNew] = useState(false);
+  const [selectedTableName, setSelectedTableName] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
 
-  const isEditing = (record, tableName) => editingKey[tableName] === record.key;
+  let emp_code = JSON.parse(localStorage.getItem('emp_code'));
 
-  const edit = (record, tableName) => {
-    form.setFieldsValue({ ...record });
-    setEditingKey({ ...editingKey, [tableName]: record.key });
-  };
+  const options = emp_code.map((emp) => ({ label: <><Tag>{emp["hovaten"]}</Tag> <Tag>{emp["ngaysinh"]}</Tag></>, value: emp["employee_id"] }));
 
   useEffect(() => {
     fetch(`${baseURL}/event/query_registed_data`, {
@@ -48,225 +48,211 @@ const EventDataTable = ({ event_data }) => {
       });
   }, []);
 
-  const cancel = (tableName) => {
-    setEditingKey({ ...editingKey, [tableName]: '' });
+  const handleEditButtonClick = (key, table_id, table_name) => {
+    console.log("key", key)
+    setIsAddNew(false);
+    setSelectedRowKey(key);
+    setSelectedTableID(table_id);
+    setSelectedTableName(table_name)
+    setEditModalVisible(true);
   };
 
-  const save = async (key, tableName) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...tableData];
-      const tableIndex = newData.findIndex((table) => table.name === tableName);
+  const handleAddButtonClick = (table_id, table_name) => {
+    setIsAddNew(true);
+    setSelectedTableID(table_id);
+    setSelectedTableName(table_name)
+    setEditModalVisible(true);
+  }
+  const showTables = () => {
+    let tables = [];
+    for (let i = 0; i < tableData.length; i++) {
+      const columns = [
+        ...Object.keys(tableData[i].data[0] || {})
+          .filter((key) => key.toUpperCase() !== "KEY" && key.toUpperCase() !== "EMPLOYEE_ID") // Filter out "KEY" and "EMP" columns
+          .map((key) => {
+            return {
+              title: key.toUpperCase(),
+              dataIndex: key
+            };
+          }),
+        {
+          title: "Chỉnh sửa",
+          key: "action",
+          render: (text, record) => (
+            <div>
+              <Button onClick={() => handleEditButtonClick(record.key, tableData[i].table_id, tableData[i].name)}>
+                Edit
+              </Button>
+              <Popconfirm
+                title="Confirm to delete this row?"
+                onConfirm={() => {
+                  const newData = [...tableData];
+                  const index = newData[i].data.findIndex((item) => record.key === item.key);
+                  if (newData[i].data.length === 1) {
+                    let blank_data = {}
+                    for (let key in newData[i].data[0]) {
+                      blank_data[key] = "...";
+                      newData[i].data.splice(index, 1);
+                      newData[i].data[0] = blank_data;
+                    }
+                  }
+                  else {
+                    newData[i].data.splice(index, 1);
+                  }
+                  setTableData(newData);
 
-      if (tableIndex > -1) {
-        const rowIndex = newData[tableIndex].data.findIndex((item) => key === item.key);
-
-        if (rowIndex > -1) {
-          const item = newData[tableIndex].data[rowIndex];
-          newData[tableIndex].data.splice(rowIndex, 1, { ...item, ...row });
-          console.log('modified data', newData);
-          setTableData(newData);
-        } else {
-          newData[tableIndex].data.push(row);
-          console.log('new data', newData);
-          setTableData(newData);
+                  const updatedData = [...newData[i].data];
+                  setTableData((prevData) => {
+                    const updatedTableData = [...prevData];
+                    updatedTableData[i].data = updatedData;
+                    return updatedTableData;
+                  });
+                }}
+              >
+                <Button danger style={{ marginLeft: "10px" }}>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </div>
+          )
         }
+      ];
+      const table_component = () => (
+        <Collapse size="large" style={{ marginTop: "2vh", width: "100%" }}>
+          <Panel header={tableData[i].name} key="1" style={{ width: "100%" }}>
+            <Table dataSource={tableData[i].data} columns={columns} />
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Button type="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                onClick={() => handleAddButtonClick(tableData[i].table_id, tableData[i].name)}>
+                Add New Row
+              </Button>
+            </div>
+          </Panel>
+        </Collapse>
+      );
+      tables.push(table_component());
+    }
+    return tables.map((table) => <div>{table}</div>);
+  };
+
+  const EditModalContent = (cur_selectedRowKey, cur_selectedTableID) => {
+    console.log("cur_selectedTableID", cur_selectedTableID)
+    if (tableData === undefined || tableData == null || cur_selectedTableID === null || editModalVisible == false) return <></>;
+    const selected_table = tableData.filter((table) => table.table_id === cur_selectedTableID)[0];
+    let selected_table_data = selected_table.data;
+    let selected_table_modified = [...selected_table_data];
+    console.log("isAddNew", isAddNew)
+    if (isAddNew) {
+      console.log("test", selected_table_data)
+      const new_blank_row = { ...selected_table_data[0] };
+      for (let key in new_blank_row) {
+        new_blank_row[key] = null;
       }
-      setEditingKey({ ...editingKey, [tableName]: '' });
-      setForceUpdate(forceUpdate + 1);
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
+      const new_key = `Row--${uuidv4()}`;
+      new_blank_row["key"] = new_key;
+      cur_selectedRowKey = new_key;
+      console.log("selected_table_modified", selected_table_modified)
 
-  const appendRow = (name) => {
-    const newTableData = [...tableData];
-    const tableIndex = newTableData.findIndex((table) => table.name === name);
-    if (tableIndex > -1) {
-      const newData = { ...Object.fromEntries(Object.keys(newTableData[tableIndex].data[0]).map((key) => [key, '...'])) };
-      newData.key = `Row--${uuidv4()}`;
-      newTableData[tableIndex].data.push(newData);
-      setTableData(newTableData);
-      setForceUpdate(forceUpdate + 1);
+      selected_table_modified.push(new_blank_row);
+      console.log("ADD NEW KEY", cur_selectedRowKey)
+      console.log("footage tableData", tableData)
     }
-  };
 
-  const FinalSave = (event_data) => {
-    event_data.updated_at = new Date().toISOString();
-    event_data.tables = tableData;
-    fetch(`${baseURL}/event/update`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "event_data": event_data,
-        "user_id": user_id,
-        "group_id": group_id,
-      }),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        if (data.message === "Update event success") {
-          message.success('Event updated successfully');
-        } else {
-          message.error('Unable to update event 1');
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        message.error('Unable to update event');
+
+
+    const selected_row = selected_table_modified.filter((row) => row.key === cur_selectedRowKey)[0];
+    let selected_row_modified_avata = selected_row;
+    let selected_row_modified = { ...selected_row };
+    const isNameField = (field) => field === 'Tên';
+
+    const onEmployeeOptionChange = (value) => {
+      console.log(`onEmployeeOptionChange ${value}`);
+      selected_row_modified["employee_id"] = value;
+      selected_row_modified["Tên"] = emp_code.filter((emp) => emp["employee_id"] === value)[0]["hovaten"];
+    }
+    const handleFormValuesChange = (changedValues, allValues) => {
+      // update the selected_row_modified with the changed form values
+      Object.keys(changedValues).forEach(key => {
+        selected_row_modified[key] = changedValues[key];
       });
-  };
+    };
 
-  const handleDelete = (key, tableName) => {
-    const newData = [...tableData];
-    const tableIndex = newData.findIndex((table) => table.name === tableName);
-
-    if (tableIndex > -1) {
-      const rowIndex = newData[tableIndex].data.findIndex((item) => key === item.key);
-
-      if (rowIndex > 0) {
-        newData[tableIndex].data.splice(rowIndex, 1);
-        setTableData(newData);
-        setForceUpdate(forceUpdate + 1);
+    const renderFormItem = (field, value) => {
+      if (field === 'key' || field === 'employee_id') return null;
+      const fieldProps = isNameField(field) ? { style: { fontWeight: 'bold' } } : {};
+      const selectProps = isNameField(field) ? { showSearch: true, options: emp_code } : {};
+      const FieldComponent = isNameField(field) ? (
+        <Select {...selectProps} options={options} onChange={onEmployeeOptionChange} />
+      ) : (
+        <Input />
+      );
+      return (
+        <Form.Item label={field} name={field} initialValue={value}>
+          {FieldComponent}
+        </Form.Item>
+      );
+    };
+    const handleUpdateClick = () => {
+      const list_keys = Object.keys(selected_row_modified);
+      const list_values = Object.values(selected_row_modified);
+      for (let i = 0; i < list_keys.length; i++) {
+        if (list_keys[i] !== 'employee_key' || list_keys[i] !== "Tên") {
+          if (list_values[i] === null || list_values[i] === undefined || list_values[i] === "") {
+            message.error("Do not leave any field blank");
+            return;
+          }
+        }
       }
-    }
+      for (let i = 0; i < list_keys.length; i++) {
+        selected_row_modified_avata[list_keys[i]] = list_values[i]
+      }
+      const updated_selected_table_data = selected_table_modified.map(row => {
+        if (row.key === cur_selectedRowKey) {
+          return selected_row_modified_avata;
+        } else {
+          return row;
+        }
+      });
+      const updated_tableData = tableData.map(table => {
+        if (table.table_id === cur_selectedTableID) {
+          return { ...table, data: updated_selected_table_data };
+        } else {
+          return table;
+        }
+      });
+      setTableData(updated_tableData);
+      setEditModalVisible(false);
+    };
+
+    return (
+      <Form key={`${cur_selectedTableID}-${cur_selectedRowKey}`} initialValues={selected_row} onValuesChange={handleFormValuesChange}>
+        {Object.entries(selected_row).map(([field, value]) => renderFormItem(field, value))}
+        <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+          <Button type="primary" onClick={handleUpdateClick}>Update</Button>
+        </div>
+      </Form>
+    );
   };
+
+  const onModaCancel = () => {
+    setIsAddNew(false);
+    setEditModalVisible(false);
+    console.log("tableData", tableData)
+  }
 
   return (
-    <div style={{paddingBottom: "2vh"}}>
-      {tableData.map((table) => {
-        const columns = [
-          ...Object.keys(table.data[0] || {}).map((key) => ({
-            title: key.toUpperCase(),
-            dataIndex: key,
-            key,
-            editable: true,
-            render: (text, record) => (isEditing(record, table.name) ? (
-              <Form.Item
-                name={key}
-                style={{ margin: 0 }}
-                rules={[
-                  {
-                    required: true,
-                    message: `${key} is required`,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            ) : (
-              text
-            )),
-          })),
-          {
-            title: 'Tùy chỉnh',
-            dataIndex: 'operation',
-            fixed: 'right',
-            // width: 120,
-            render: (_, record) => {
-              const editable = isEditing(record, table.name);
-              return (
-                <span>
-                  {editable ? (
-                    <span>
-                      <a onClick={() => save(record.key, table.name)} style={{ marginRight: 8 }}>
-                        Save
-                      </a>
-                      <Popconfirm title="Sure to cancel?" onConfirm={() => cancel(table.name)}>
-                        <a style={{ marginRight: 8 }} >Cancel</a>
-                      </Popconfirm>
-                      <Popconfirm
-                        title="Are you sure DELETE this row?"
-                        icon={
-                          <QuestionCircleOutlined
-                            style={{
-                              color: 'red',
-                            }}
-                          />
-                        }
-                        onConfirm={() => handleDelete(record.key, table.name)}
-                      >
-                        <a type='primary' style={{ color: '#E96767' }} >Delete</a>
-                      </Popconfirm>
-                    </span>
-                  ) : (
-                    <span>
-                      <Button type='primary' disabled={false} onClick={() => edit(record, table.name)} style={{ marginRight: 8 }}>
-                        Edit
-                      </Button>
-
-                    </span>
-                  )}
-                </span>
-              );
-            },
-          },
-        ];
-
-
-        const filteredColumns = columns.filter((column) => column.key !== 'key');
-
-        const mergedColumns = filteredColumns.map((col) => {
-          if (!col.editable) {
-            return col;
-          }
-          return {
-            ...col,
-            onCell: (record) => ({
-              record,
-              inputType: col.dataIndex === 'age' ? 'number' : 'text',
-              dataIndex: col.dataIndex,
-              title: col.title,
-              editing: isEditing(record, table.name),
-            }),
-          };
-        });
-
-        return (
-          <Collapse size="large" style={{ marginTop: "2vh" }}>
-            <Panel header={table.name} key="1">
-              <div key={`${table.name}-${forceUpdate}`} style={{ textAlign: 'right', marginTop: "1vh" }} >
-                <div style={{ textAlign: 'left' }}>
-                  {/* <h2>{table.name}</h2> */}
-                  <Form form={form} component={false}>
-                    <Table
-                      components={{
-                        body: {
-                          cell: EditableCell,
-                        },
-                      }}
-                      dataSource={table.data}
-                      columns={mergedColumns}
-                      rowClassName='editable-row'
-                      pagination={{ pageSize: 25 }}
-                      scroll={{ x: true }}
-                    />
-                  </Form>
-                </div>
-                <Button
-                  onClick={() => appendRow(table.name)}
-                  style={{ marginTop: '5px' }}
-                >
-                  Append
-                </Button>
-              </div>
-            </Panel>
-          </Collapse>
-        );
-      })}
-      <div style={{ width: "100%", textAlign: "center" }}>
-        <Button
-          type='primary'
-          onClick={() => FinalSave(event_data, user_id)}
-          style={{ marginTop: '5px' }}
-        >
-          SUBMIT
-        </Button>
-      </div>
+    <div>
+      {showTables()}
+      <Modal
+        title={selectedTableName}
+        open={editModalVisible}
+        footer={null}
+        // onOk={() => setEditModalVisible(false)}
+        onCancel={() => onModaCancel()}
+        destroyOnClose={true}
+      >
+        {EditModalContent(selectedRowKey, selectedTableID, selectedTableName)}
+      </Modal>
     </div>
   );
 };

@@ -313,7 +313,7 @@ const EditableTable = ({ emp_data }) => {
                     ),
                 groupNameColumn,
                 statusColumn,
-                actionColumn, // Append the new column to the end of the array
+                // actionColumn, // Append the new column to the end of the array
             ]);
     };
 
@@ -336,9 +336,7 @@ const EditableTable = ({ emp_data }) => {
     const columns = generateColumns(dataSource);
     const [container, setContainer] = useState(null);
     const handleOk = () => {
-        // Save the new column name in the state variable
         if (newColumnName) {
-            // Add the new column to the table
             const newData = [...dataSource];
             newData.forEach(item => item[newColumnName] = '...');
             setDataSource(newData);
