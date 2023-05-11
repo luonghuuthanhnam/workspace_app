@@ -19,7 +19,7 @@ const EventDashboard = () => {
     const [mvp_group_emp_joining, setMvp_group_emp_joining] = useState(null);
     const [mvp_emp, setMvp_emp] = useState(null);
     const [group_options, setGroup_options] = useState(null);
-    const [selected_period, setSelected_period] = useState(["All"]);
+    const [selected_period, setSelected_period] = useState(["All Time"]);
     const [selected_entity, setSelected_entity] = useState("defautl_all_department");
     const user_id = localStorage.getItem('userID');
 
@@ -144,8 +144,8 @@ const EventDashboard = () => {
     }
     const handlePeriodSelectionChange = (value) => {
         console.log("period: ", value);
-        if (value === "All") {
-            setSelected_period(["All"]);
+        if (value === "All Time") {
+            setSelected_period(["All Time"]);
         }
         else {
             console.log("value: ", value);

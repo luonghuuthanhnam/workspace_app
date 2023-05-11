@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 const TagColumn = (props) => {
     const { token } = theme.useToken();
-    const [tags, setTags] = useState(['Mã Nhân Viên', 'Tên']);
+    const [tags, setTags] = useState(['Tên']);
     const [inputVisible, setInputVisible] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [editInputIndex, setEditInputIndex] = useState(-1);

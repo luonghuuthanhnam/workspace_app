@@ -37,7 +37,7 @@ const EventDataTable = ({ event_data }) => {
       })
       .then((data) => {
         if (data != null) {
-          console.log('registed data', data)
+          // console.log('registed data', data)
           const registed_table_data = data;
           setTableData(registed_table_data);
         }
@@ -49,7 +49,7 @@ const EventDataTable = ({ event_data }) => {
   }, []);
 
   const handleEditButtonClick = (key, table_id, table_name) => {
-    console.log("key", key)
+    // console.log("key", key)
     setIsAddNew(false);
     setSelectedRowKey(key);
     setSelectedTableID(table_id);
@@ -92,6 +92,8 @@ const EventDataTable = ({ event_data }) => {
                     let blank_data = {}
                     for (let key in newData[i].data[0]) {
                       blank_data[key] = "...";
+                      const new_key = `Row--${uuidv4()}`;
+                      blank_data["key"] = new_key;
                       newData[i].data.splice(index, 1);
                       newData[i].data[0] = blank_data;
                     }
@@ -122,7 +124,7 @@ const EventDataTable = ({ event_data }) => {
           <Panel header={tableData[i].name} key="1" style={{ width: "100%" }}>
             <Table dataSource={tableData[i].data} columns={columns} />
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <Button type="primary" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+              <Button style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                 onClick={() => handleAddButtonClick(tableData[i].table_id, tableData[i].name)}>
                 Add New Row
               </Button>
@@ -136,14 +138,14 @@ const EventDataTable = ({ event_data }) => {
   };
 
   const EditModalContent = (cur_selectedRowKey, cur_selectedTableID) => {
-    console.log("cur_selectedTableID", cur_selectedTableID)
+    // console.log("cur_selectedTableID", cur_selectedTableID)
     if (tableData === undefined || tableData == null || cur_selectedTableID === null || editModalVisible == false) return <></>;
     const selected_table = tableData.filter((table) => table.table_id === cur_selectedTableID)[0];
     let selected_table_data = selected_table.data;
     let selected_table_modified = [...selected_table_data];
-    console.log("isAddNew", isAddNew)
+    // console.log("isAddNew", isAddNew)
     if (isAddNew) {
-      console.log("test", selected_table_data)
+      // console.log("test", selected_table_data)
       const new_blank_row = { ...selected_table_data[0] };
       for (let key in new_blank_row) {
         new_blank_row[key] = null;
@@ -151,11 +153,11 @@ const EventDataTable = ({ event_data }) => {
       const new_key = `Row--${uuidv4()}`;
       new_blank_row["key"] = new_key;
       cur_selectedRowKey = new_key;
-      console.log("selected_table_modified", selected_table_modified)
+      // console.log("selected_table_modified", selected_table_modified)
 
       selected_table_modified.push(new_blank_row);
-      console.log("ADD NEW KEY", cur_selectedRowKey)
-      console.log("footage tableData", tableData)
+      // console.log("ADD NEW KEY", cur_selectedRowKey)
+      // console.log("footage tableData", tableData)
     }
 
 
@@ -166,7 +168,7 @@ const EventDataTable = ({ event_data }) => {
     const isNameField = (field) => field === 'Tên';
 
     const onEmployeeOptionChange = (value) => {
-      console.log(`onEmployeeOptionChange ${value}`);
+      // console.log(`onEmployeeOptionChange ${value}`);
       selected_row_modified["employee_id"] = value;
       selected_row_modified["Tên"] = emp_code.filter((emp) => emp["employee_id"] === value)[0]["hovaten"];
     }
@@ -237,11 +239,50 @@ const EventDataTable = ({ event_data }) => {
   const onModaCancel = () => {
     setIsAddNew(false);
     setEditModalVisible(false);
-    console.log("tableData", tableData)
+    // console.log("tableData", tableData)
   }
+
+  const FinalSave = (event_data) => {
+    event_data.updated_at = new Date().toISOString();
+    event_data.tables = tableData;
+    fetch(`${baseURL}/event/update`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "event_data": event_data,
+        "user_id": user_id,
+        "group_id": group_id,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data.message === "Update event success") {
+          message.success('Event updated successfully');
+        } else {
+          message.error('Unable to update event 1');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        message.error('Unable to update event');
+      });
+  };
 
   return (
     <div>
+      <div style={{ width: "100%", textAlign: "center" }}>
+        <Button
+          type='primary'
+          onClick={() => FinalSave(event_data, user_id)}
+          style={{ marginTop: '5px' }}
+        >
+          SUBMIT
+        </Button>
+      </div>
       {showTables()}
       <Modal
         title={selectedTableName}
