@@ -10,6 +10,9 @@ export default function ProvinceDistributionChart({ data }) {
             xField: 'value',
             yField: 'province',
             seriesField: 'province',
+            barStyle: {
+                radius: [20, 20, 0, 0],
+            },
             color: ({ province }) => {
                 return province === 'TP Hồ Chí Minh' ? '#FAAD14' : '#5B8FF9';
             },

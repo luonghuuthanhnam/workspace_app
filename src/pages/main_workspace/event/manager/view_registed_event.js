@@ -93,7 +93,17 @@ const ViewRegistedEvent = () => {
           setGroupNames(groupNames);
           console.log("groupNames", groupNames);
           const groupValues = [...new Set(tableData.map((data) => data.group_name))];
-          const newColumns = Object.keys(tableData[0]).map((key) => ({
+          if(tableData.length === 0) {
+            setTableColumns([]);
+            setEventData([]);
+            setSearchQuery([]);
+            }
+          else{
+
+          
+          const newColumns = Object.keys(tableData[0])
+          .filter((key) => key !== "employee_id" && key!== "event_date") // Ignore "group_id" column
+          .map((key) => ({
             title: key === "group_name" ? "Đơn Vị" : key,
             dataIndex: key,
             key,
@@ -104,11 +114,12 @@ const ViewRegistedEvent = () => {
                     const bLastName = b[key].split(" ").pop();
                     return aLastName.localeCompare(bLastName);
                   }
-                : undefined,
+                : (a, b) => a[key].localeCompare(b[key]), // Sort by string
           }));
           setTableColumns(newColumns);
           setEventData(tableData === null ? [] : tableData); // Update setEventData to set empty data if tableData is null
           setSearchQuery(tableData);
+        }
         } catch (error) {
           console.error(error);
         }
@@ -164,7 +175,7 @@ const ViewRegistedEvent = () => {
     };
     const [container, setContainer] = useState(null);
     return (
-        <div style={{height: "100%", overflowY:"scroll"}} ref={setContainer}>
+        <div style={{height: "100%", overflowY:"auto", backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"2%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}} ref={setContainer}>
             <Select
                 placeholder="Select an event"
                 onChange={handleEventSelect}

@@ -8,6 +8,7 @@ import { Router, Route, Routes, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { baseURL } from './config';
+import TestEditablTable from './components/EditableTable/editable_table';
 
 
 
@@ -15,13 +16,6 @@ const defaultData = {
   borderRadius: 6,
   colorPrimary: '#1677ff',
 };
-
-
-// const baseURL = "http://localhost:8000";
-// const baseURL = "https://stingy-ebony-shape.glitch.me/"
-// localStorage.removeItem("backed_baseURL")
-// localStorage.setItem('backed_baseURL', baseURL)
-// console.log("saving local storage: baseURL:", baseURL)
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -63,6 +57,7 @@ function App() {
       </div>
     </ConfigProvider>
   );
+
 }
 
 export default App;

@@ -4,7 +4,8 @@ import { unidecode } from 'unidecode';
 
 
 const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  console.log('title', title)
   return (
     <td {...restProps}>
       {editing ? (

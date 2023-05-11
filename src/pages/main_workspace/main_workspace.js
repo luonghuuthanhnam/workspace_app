@@ -1,6 +1,6 @@
 import { FileOutlined, FundViewOutlined, DownSquareOutlined, PlusSquareOutlined, StarOutlined, ScheduleOutlined, UsergroupAddOutlined, ToolOutlined, SolutionOutlined, FundOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme, Affix } from 'antd';
-import { Button, ConfigProvider, Form, InputNumber } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Affix, Popover, Row, Col, Divider } from 'antd';
+import { Button, ConfigProvider, Form, InputNumber, Avatar } from 'antd';
 import { useState, useEffect } from 'react';
 import LoginPage from '../login/login';
 import EmployeeTable from './employee/employee_table';
@@ -12,6 +12,9 @@ import EventCardLayoutv2 from './event/admin/event_card';
 import ViewRegistedEvent from './event/manager/view_registed_event';
 import EventDashboard from './event/manager/event_dashboard';
 import { baseURL } from '../../config';
+import UploadForm from './upload/upload_form';
+import { display } from '@mui/system';
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -26,6 +29,11 @@ function getItem(label, key, icon, children) {
 }
 function MainWorkSpace() {
   const navigate = useNavigate();
+  const userId = localStorage.getItem('userID');
+  const group_id = localStorage.getItem('group_id');
+  const adminIds = ["19031998", "12345678", "87654321"];
+  const isAdmin = adminIds.includes(userId);
+
   const handleLogout = () => {
     localStorage.removeItem("userID")
     navigate('/login');
@@ -33,10 +41,13 @@ function MainWorkSpace() {
 
   useEffect(() => {
     fetch(`${baseURL}/imployee/get_all_employee_code`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        "groupID": group_id,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -49,13 +60,6 @@ function MainWorkSpace() {
       });
   }, []);
 
-
-
-
-  const userId = localStorage.getItem('userID');
-  const group_id = localStorage.getItem('group_id');
-  const adminIds = ["19031998", "12345678", "87654321"]; // replace with your list of admin IDs
-  const isAdmin = adminIds.includes(userId);
   useEffect(() => {
     if (userId == null) {
       navigate('/login');
@@ -85,7 +89,8 @@ function MainWorkSpace() {
     <img src="favicon.ico" alt="" style={{ height: "100%" }} />
   </div>
 
-  const siderTitle = collapsed ? collapsed_icon :
+  // const siderTitle = collapsed ? collapsed_icon :
+  const siderTitle = collapsed ? <Divider></Divider> :
     <div
       style={{
         display: "flex",
@@ -96,23 +101,39 @@ function MainWorkSpace() {
         background: "#5EAAA8",
         color: "#FFFFFF",
         fontWeight: "bold",
+        borderRadius: "0.2vw",
 
       }}
     >
       <h4>
-        WorkSpace on Cloud
+        WORKSPACE
       </h4>
     </div>
 
+  const siderLogo = collapsed ?
+  <div style={{ width: "100%", display:"flex", justifyContent:"center"}}>
+    <Col style={{width: "100%"}}>
+      <Row style={{width: "100%", display:"flex", justifyContent:"center"}}>
+        <img src="cdvn_logo.jpg" alt="Logo 1" width="60%" />
+      </Row>
+      <Row style={{width: "100%", display:"flex", justifyContent:"center"}}>
+        <img src="khcn_logo.jpg" alt="Logo 2" width="60%"  />
+      </Row>
+    </Col>
+  </div>
+    :
+  <div style={{display:"flex", justifyContent:"center"}}>
+    <Row style={{display:"flex", justifyContent:"center"}}>
+      <img src="cdvn_logo.jpg" alt="Logo 1" width="25%"/>
+      <img src="khcn_logo.jpg" alt="Logo 2" width="25%"/>
+    </Row>
+  </div>
+
   const items = [
     getItem('Event', '1', <ScheduleOutlined />, [
-      getItem('Event list', '11', <StarOutlined />),
-      // getItem('Pendding', '12'),
-      // getItem('Rejected', '13'),
-      // getItem('Create', '14'),
+      getItem('Event list', '11', <StarOutlined />)
     ]
     ),
-    // getItem('Project List', '2', <DesktopOutlined />),
     getItem('Employee', '3', <UsergroupAddOutlined />, [
       getItem('Table', '31', <SolutionOutlined />),
       getItem('Chart', '32', <FundOutlined />),
@@ -128,6 +149,8 @@ function MainWorkSpace() {
         getItem('Event Dashboard', '43', <FundViewOutlined />),
       ])
     );
+    // items.push(
+    //   getItem("Upload File", "5", <FileOutlined />));
   }
 
   function handleCreateEventSuccess() {
@@ -153,6 +176,7 @@ function MainWorkSpace() {
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
           >
+            {siderLogo}
             {siderTitle}
             <Menu
               theme="light"
@@ -174,7 +198,23 @@ function MainWorkSpace() {
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "100%" }}>
               <h3 style={{ marginLeft: "0.8vw", color: "#FFFFFF" }}>WORKSPACE ON CLOUD</h3>
-              <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Log out</Button>
+              <div style={{ width: "10%", display: "flex", justifyContent: "end", alignItems: "center", marginRight: "1vw" }}>
+
+                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Log out</Button>
+                <Popover content={"trung tam 1"} title={'Trung tâm 1'} placement="right">
+                  <Avatar
+                    style={{
+                      backgroundColor: '#f56a00',
+                      verticalAlign: 'middle',
+                    }}
+                    size="large"
+                    gap={4}
+                  >
+                    TT1
+                  </Avatar>
+                </Popover>
+
+              </div>
             </div>
           </Header>
           <Content
@@ -203,29 +243,26 @@ function MainWorkSpace() {
               style={{
                 padding: 15,
                 height: "92%",
+                // height: "80vh",
+                width: "100%",
                 // height: ,
-                background: colorBgContainer,
+                // background: colorBgContainer,
+                background: "#F5F5F5"
               }}
             >
+
               {selectedMenuItem === '31' && <EmployeeTable />}
               {selectedMenuItem === '32' && <EmployeeChart />}
               {selectedMenuItem === '11' && <EventCardLayoutv2 event_state="Joined" userId={userId} />}
-              {/* {selectedMenuItem === '12' && <EventCardLayoutv2 event_state="Pendding" userId={userId} />}
-              {selectedMenuItem === '13' && <EventCardLayoutv2 event_state="Rejected" userId={userId} />} */}
+
               {selectedMenuItem === '41' && <CreateEvent user_id={userId} onCreateEventSuccess={handleCreateEventSuccess}></CreateEvent>}
               {selectedMenuItem === '42' && <ViewRegistedEvent></ViewRegistedEvent>}
               {selectedMenuItem === '43' && <EventDashboard></EventDashboard>}
+              {selectedMenuItem === '5' && <UploadForm></UploadForm>}
 
+              {/* <EditableTable></EditableTable> */}
             </div>
           </Content>
-          {/* <Footer
-            style={{
-              height: "2vh",
-              textAlign: 'center',
-            }}
-          >
-            ©2023 Created by SLN
-          </Footer> */}
         </Layout>
       </Layout>
     </ConfigProvider>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from 'antd';
+import { Card, Empty } from 'antd';
 import { type } from '@testing-library/user-event/dist/type';
 import { Affix, Table, Tag, Button, Row, Col, Spin, Popconfirm, Popover } from 'antd';
 import EventContent from '../event_content';
@@ -56,11 +56,11 @@ function CardList({ userId, event_state, onCardClick }) {
         onCardClick(event_data);
     }
     return (
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", height: "100%", width: "100%" }}>
-                <Spin spinning={loading} style={{width:"100%", height:"100%"}}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", height: "100%", width: "100%"}}>
-                        {events.map(event => (
-                            <Popover content={event.description} title={event.title} placement="right">
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", height: "100%", width: "100%" }}>
+            <Spin spinning={loading} style={{ width: "100%", height: "100%" }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: "center", height: "100%", width: "100%" }}>
+                    {events.map(event => (
+                        <Popover content={event.description} title={event.title} placement="right">
                             <Card
                                 key={event.title}
                                 hoverable
@@ -73,11 +73,11 @@ function CardList({ userId, event_state, onCardClick }) {
                                     style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
                                 />
                             </Card>
-                            </Popover>
-                        ))}
-                    </div>
-                </Spin>
-            </div>
+                        </Popover>
+                    ))}
+                </div>
+            </Spin>
+        </div>
     );
 };
 
@@ -100,20 +100,28 @@ function EventCardLayoutV2({ userId, event_state }) {
     const [container, setContainer] = useState(null);
     return (
         <div ref={setContainer} style={{ height: "100%" }}>
-            <Row justify="space-between" style={{ marginTop: '20px', height: "100%"}}>
-                <Col span={5} style={{ border: "solid #A3D2CA", borderWidth: "0 1px 0 0", height: "100%"}}>
-                    <div style={{ width: "100%", height: "100%", overflowY: "scroll"}}>
-                        <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick}/>
+            <Row justify="space-between" style={{ marginTop: '20px', height: "100%" }}>
+                <Col style={{ height: "100%", width: "20%", backgroundColor: "#FFFFFF", borderRadius: "0.5vw", padding: "1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)" }}>
+                    <div style={{ width: "100%", height: "100%", overflowY: "auto" }}>
+                        <CardList userId={userId} event_state={event_state} onCardClick={handleCardClick} />
                     </div>
                 </Col>
-                <Col span={18} style={{ height: "80vh", paddingLeft: "2%", width: "60vw" }}>
+                <Col style={{ height: "100%", paddingLeft: "1%", width: "78%", backgroundColor: "#FFFFFF", borderRadius: "1%", padding: "1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)" }}>
                     {loading ? (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "100%" }}>
                             <Spin size="large" />
                         </div>
                     ) : (
-                        console.log("selectedEventData", selectedEventData),
-                        <EventContent event_data={selectedEventData} />
+                        selectedEventData === null ?
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "100%" }}>
+                                <Empty description={<>Select Event</>} />
+                            </div>
+                            : (
+                                <>
+                                    {console.log("selectedEventData", selectedEventData)}
+                                    <EventContent event_data={selectedEventData} />
+                                </>
+                            )
                     )}
                 </Col>
             </Row>

@@ -7,11 +7,16 @@ import EmployeePieChart from "./employee_pie";
 import JoiningByGenderChart from "./employee_joining_by_gender_chart";
 import AgeDistributionChart from "./employee_age_line_chart";
 import ProvinceDistributionChart from "./employee_province_distribution";
+import SunburstChart from "./sunburst_chart";
 import { baseURL } from '../../../config';
+import { width } from "@mui/system";
 
 const EmployeeChart = () => {
     const [received_data, setReceived_data] = React.useState(null);
     const [received_pie_data, setReceived_pie_data] = React.useState(null);
+    const [received_working_status_data, setReceived_working_status_data] = React.useState(null);
+    const [received_sunburst_data, setReceived_sunburst_data] = React.useState(null);
+
     const [received_joining_data, setReceived_joining_data] = React.useState(null);
     const [received_age_data, setReceived_age_data] = React.useState(null);
     const [received_province_data, setReceived_province_data] = React.useState(null);
@@ -28,28 +33,40 @@ const EmployeeChart = () => {
         }).then((response) => {
             setReceived_data(response.data["main_data"]);
             setReceived_pie_data(response.data["pie_chart"]);
+            setReceived_working_status_data(response.data["working_status"]);
+            setReceived_sunburst_data(response.data["sunburst_data"]);
             setReceived_joining_data(JSON.parse(response.data["joining_by_gender"]));
             setReceived_age_data(JSON.parse(response.data["age_distribution"]));
             setReceived_province_data(JSON.parse(response.data["province_distribution"]));
             setLoading(false);
         });
     }
+
     return (
-        <div style={{ height: '100%', overflowY: "scroll" }}>
+        <div style={{ height: '100%', overflowY: "scroll", backgroundColor: "#FFFFFF", borderRadius: "1vw", padding: "1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)" }}>
             <Spin spinning={loading}>
                 <div className="employee_main_div">
-                    <Row justify="space-between" style={{ marginTop: '20px' }}>
-                        <Col span={8}>
+                    <Row justify="space-between" style={{ margin: '4vh' }}>
+                        <Col span={7} style={{ paddingLeft: '2vw', display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
                             <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>GENDER RATIO</h3>
-                            <EmployeePieChart className='employee_pie_chart' data={received_pie_data}></EmployeePieChart>
+                            <EmployeePieChart className='employee_pie_chart' data={received_pie_data} annotation={"Số nhân viên"}></EmployeePieChart>
                         </Col>
-                        <Col span={16} style={{ paddingLeft: '5vw' }}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>ANNUALLY JOINING EMPLOYEE</h3>
-                            <JoiningByGenderChart data={received_joining_data}></JoiningByGenderChart>
+                        <Col span={7} style={{ paddingLeft: '2vw', display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>DEPARTMENT EMPLOYEE</h3>
+                            <SunburstChart className='employee_pie_chart' data={received_sunburst_data}></SunburstChart>
+                        </Col>
+                        <Col span={7} style={{ paddingLeft: '2vw', display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE STATUS</h3>
+                            <EmployeePieChart className='employee_pie_chart' data={received_working_status_data} annotation={"Số nhân viên"}></EmployeePieChart>
                         </Col>
                     </Row>
-                    <Row style={{ marginTop: '10vh' }}></Row>
-                    <Row justify="space-between" style={{ marginTop: '20px' }}>
+                    <Row style={{ margin: '4vh', width: "95%"}}>
+                        <div style={{width:"100%"}}>
+                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>ANNUALLY JOINING EMPLOYEE</h3>
+                            <JoiningByGenderChart data={received_joining_data}></JoiningByGenderChart>
+                        </div>
+                    </Row>
+                    <Row justify="space-between" style={{ marginTop: '20px', margin: '4vh' }}>
                         <Col span={8}>
                             <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE HOMETOWN DISTRIBUTION</h3>
                             <ProvinceDistributionChart data={received_province_data}></ProvinceDistributionChart>
@@ -59,7 +76,6 @@ const EmployeeChart = () => {
                             <AgeDistributionChart data={received_age_data}></AgeDistributionChart>
                         </Col>
                     </Row>
-
                 </div>
             </Spin>
         </div>

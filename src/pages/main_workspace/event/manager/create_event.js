@@ -181,14 +181,11 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
     // }
     const [container, setContainer] = useState(null);
     return (
-        <div style={{ display: "flex", marginLeft: "2vw", height: "100%" ,overflowY: "scroll",  marginBottom: "1vh"}} ref={setContainer}>
-            <Col span={8}>
-                <Affix target={() => container}>
-                <section style={{ width: "100%", borderStyle: "solid", padding: "5%", borderColor: "#E3E3E3", borderWidth: "1px", borderRadius: "1vw", marginBottom: "1vh"}}>
-
-                {/* <h1>Create Event</h1> */}
-                <Form layout="vertical">
-                    <Form.Item label="Event Title" style={{ width: "100%" }}>
+        <div style={{ display: "flex", height: "100%",  marginBottom: "1vh", width: "100%"}} ref={setContainer}>
+            <Col style={{ height: "100%", width:"30%",backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
+                <section style={{ width: "100%", height:"100%", borderStyle: "solid", padding: "5%", borderColor: "#E3E3E3", borderWidth: "1px", borderRadius: "1vw", marginBottom: "1vh",overflowY: "auto"}}>
+                <Form layout="vertical" style={{height:"100%"}}>
+                    <Form.Item label="Event Title" style={{ width: "100%"}}>
                         <Input value={eventTitle} onChange={handleTitleChange} />
                     </Form.Item>
                     <Form.Item label="Event Dates" style={{ width: "100%" }}>
@@ -237,10 +234,10 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                     </Form.Item>
                 </Form>
             </section>
-            </Affix>
+            {/* </Affix> */}
             </Col>
 
-            <Col span={14} style={{ marginLeft: "2vw" }}>
+            <Col style={{ marginLeft: "1vw", width: "73%", backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
                 <Row gutter={[16, 16]}>
                     {tables.map((table, index) => (
                         <Col style={{ width: "100%" }} key={index}>
