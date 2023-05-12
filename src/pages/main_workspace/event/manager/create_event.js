@@ -170,40 +170,31 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
         setPreviousTags(tags);
     }
     }
-    // const handleTagsChange = (tags) => {
-    //     console.log("tags", tags)
-        // const columns = tags.map((column, index) => ({
-        //     title: column,
-        //     dataIndex: `column${index}`,
-        //     key: `column${index}`,
-        // }));
-        // setTableColumns(columns);
-    // }
     const [container, setContainer] = useState(null);
     return (
         <div style={{ display: "flex", height: "100%",  marginBottom: "1vh", width: "100%"}} ref={setContainer}>
             <Col style={{ height: "100%", width:"30%",backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"1%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}}>
                 <section style={{ width: "100%", height:"100%", borderStyle: "solid", padding: "5%", borderColor: "#E3E3E3", borderWidth: "1px", borderRadius: "1vw", marginBottom: "1vh",overflowY: "auto"}}>
                 <Form layout="vertical" style={{height:"100%"}}>
-                    <Form.Item label="Event Title" style={{ width: "100%"}}>
+                    <Form.Item label="Tiêu đề" style={{ width: "100%"}}>
                         <Input value={eventTitle} onChange={handleTitleChange} />
                     </Form.Item>
-                    <Form.Item label="Event Dates" style={{ width: "100%" }}>
+                    <Form.Item label="Thời gian diễn ra" style={{ width: "100%" }}>
                         <RangePicker value={eventDates} onChange={handleDatesChange} />
                     </Form.Item>
                     <Form.Item label="Event Description">
                         <Input.TextArea value={eventDescription} onChange={handleDescriptionChange} style={{ height: "15vh" }} />
                     </Form.Item>
-                    <Form.Item label="Table Name">
+                    <Form.Item label="Tên bảng">
                         <Input value={tableName} onChange={(event) => setTableName(event.target.value)} />
                     </Form.Item>
-                    <Form.Item label="Table Columns">
+                    <Form.Item label="Cột">
                         <TagColumn onTagsChange={handleTagsChange} />
                     </Form.Item>
                     <Form.Item>
                         <div style={{display:"flex",justifyContent: "space-between"}}>
 
-                        <Button onClick={handleCreateTable} disabled={!tableName}>Create Table</Button>
+                        <Button onClick={handleCreateTable} disabled={!tableName}>Tạo Bảng</Button>
                        
                     {/* </Form.Item>
                     <Form.Item style={{ display: "flex", justifyContent: "flex-end" }}> */}
@@ -215,11 +206,11 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                                 tables.length === 0
                             }
                             placement="topLeft"
-                            title="Save?"
-                            description="Confirm to save new event"
+                            title="Lưu?"
+                            description="Xác nhận lưu"
                             onConfirm={confirm_save}
-                            okText="Save"
-                            cancelText="Cancel"
+                            okText="Lưu"
+                            cancelText="Hủy"
                             >
                             <Button type='primary' disabled={
                                 !eventTitle ||
@@ -227,7 +218,7 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                                 // !eventDescription ||
                                 tables.length === 0
                             } style={{ width: "7vw" }}>
-                                Done
+                                Hoàn Thành
                             </Button>
                         </Popconfirm>
                         </div>
@@ -242,12 +233,12 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                     {tables.map((table, index) => (
                         <Col style={{ width: "100%" }} key={index}>
                             <h2>{tableNames[index]}</h2>
-                            <Button onClick={() => handleEditTable(index, tableNames[index])}>Edit</Button>
-                            <Button onClick={() => handleDeleteTable(index)}>Delete</Button>
+                            <Button onClick={() => handleEditTable(index, tableNames[index])}>Sửa</Button>
+                            <Button onClick={() => handleDeleteTable(index)}>Xóa</Button>
                             <Table dataSource={table.data} columns={table.columns} />
                             {editingTableIndex === index && (
-                                <Modal title={`Edit Table - ${editedTableName}`} open={true} onOk={handleSaveTable} onCancel={() => setEditingTableIndex(-1)}>
-                                    <Form.Item label="Table Name">
+                                <Modal title={`Sửa bảng - ${editedTableName}`} open={true} onOk={handleSaveTable} onCancel={() => setEditingTableIndex(-1)}>
+                                    <Form.Item label="Tên bảng">
                                         <Input value={editedTableName} onChange={(event) => setEditedTableName(event.target.value)} />
                                     </Form.Item>
                                     {editingTableColumns.map((column, index) => (
@@ -257,10 +248,10 @@ const CreateEvent = ({ user_id, onCreateEventSuccess }) => {
                                                 newColumns[index] = { ...newColumns[index], title: event.target.value };
                                                 setEditingTableColumns(newColumns);
                                             }} />
-                                            <Button onClick={() => handleRemoveColumn(index)}>Remove</Button>
+                                            {/* <Button onClick={() => handleRemoveColumn(index)}>Xóa</Button> */}
                                         </div>
                                     ))}
-                                    <Button onClick={handleAddColumn}>Add Column</Button>
+                                    <Button onClick={handleAddColumn}>Thêm cột</Button>
                                 </Modal>
                             )}
                         </Col>

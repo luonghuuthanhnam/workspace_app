@@ -44,7 +44,7 @@ const EventDataTable = ({ event_data }) => {
       })
       .catch((error) => {
         console.error(error);
-        message.error('Unable to get registed data');
+        message.error('Không thể lấy dữ liệu đã đăng ký');
       });
   }, []);
 
@@ -81,10 +81,10 @@ const EventDataTable = ({ event_data }) => {
           render: (text, record) => (
             <div>
               <Button onClick={() => handleEditButtonClick(record.key, tableData[i].table_id, tableData[i].name)}>
-                Edit
+                Sửa
               </Button>
               <Popconfirm
-                title="Confirm to delete this row?"
+                title="Bạn có chắc chắn muốn xóa dòng này?"
                 onConfirm={() => {
                   const newData = [...tableData];
                   const index = newData[i].data.findIndex((item) => record.key === item.key);
@@ -112,7 +112,7 @@ const EventDataTable = ({ event_data }) => {
                 }}
               >
                 <Button danger style={{ marginLeft: "10px" }}>
-                  Delete
+                  Xóa
                 </Button>
               </Popconfirm>
             </div>
@@ -126,7 +126,7 @@ const EventDataTable = ({ event_data }) => {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
               <Button style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                 onClick={() => handleAddButtonClick(tableData[i].table_id, tableData[i].name)}>
-                Add New Row
+                Thêm hàng
               </Button>
             </div>
           </Panel>
@@ -200,7 +200,7 @@ const EventDataTable = ({ event_data }) => {
       for (let i = 0; i < list_keys.length; i++) {
         if (list_keys[i] !== 'employee_key' || list_keys[i] !== "Tên") {
           if (list_values[i] === null || list_values[i] === undefined || list_values[i] === "") {
-            message.error("Do not leave any field blank");
+            message.error("Vui lòng nhập đầy đủ thông tin");
             return;
           }
         }
@@ -230,7 +230,7 @@ const EventDataTable = ({ event_data }) => {
       <Form key={`${cur_selectedTableID}-${cur_selectedRowKey}`} initialValues={selected_row} onValuesChange={handleFormValuesChange}>
         {Object.entries(selected_row).map(([field, value]) => renderFormItem(field, value))}
         <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-          <Button type="primary" onClick={handleUpdateClick}>Update</Button>
+          <Button type="primary" onClick={handleUpdateClick}>Cập nhật</Button>
         </div>
       </Form>
     );
@@ -261,14 +261,14 @@ const EventDataTable = ({ event_data }) => {
       })
       .then((data) => {
         if (data.message === "Update event success") {
-          message.success('Event updated successfully');
+          message.success('Cập nhật sự kiện thành công');
         } else {
-          message.error('Unable to update event 1');
+          message.error('Không thể cập nhật sự kiện');
         }
       })
       .catch((error) => {
         console.error(error);
-        message.error('Unable to update event');
+        message.error('Không thể cập nhật sự kiện');
       });
   };
 
@@ -280,7 +280,7 @@ const EventDataTable = ({ event_data }) => {
           onClick={() => FinalSave(event_data, user_id)}
           style={{ marginTop: '5px' }}
         >
-          SUBMIT
+          LƯU
         </Button>
       </div>
       {showTables()}
