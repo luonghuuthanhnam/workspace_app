@@ -144,7 +144,7 @@ function MainWorkSpace() {
 
   if (isAdmin) {
     items.push(
-      getItem('Admin', '4', <ToolOutlined />, [
+      getItem('Manager', '4', <ToolOutlined />, [
         getItem('Tạo sự kiện', '41', <PlusSquareOutlined />),
         getItem('Danh sách đăng ký', '42', <DownSquareOutlined />),
         getItem('Dashboard', '43', <FundViewOutlined />),

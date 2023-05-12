@@ -64,7 +64,17 @@ function LoginPage({ onLogin }) {
         </Col>
         <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "80vh" }}>
           <div style={{ maxWidth: '400px', textAlign: 'center' }}>
-            <img src="../images/logo.png" alt="Logo" style={{ width: '200px', marginBottom: '20px' }} />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent:"space-evenly",
+                marginBottom: "3vh"
+              }}
+            >
+            <img src="cdvn_logo.jpg" alt="Logo" style={{ width: '7vw', marginBottom: '20px' }} />
+            <img src="khcn_logo.jpg" alt="Logo" style={{ width: '7vw', marginBottom: '20px'}} />
+            </div>
             <Input placeholder="Email" style={{ marginBottom: '10px' }} value={email} onChange={(e) => setEmail(e.target.value)} />
             <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} onPressEnter={handleLogin}/>
             {/* <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>Login</Button> */}
