@@ -47,17 +47,17 @@ const EmployeeChart = () => {
             <Spin spinning={loading}>
                 <div className="employee_main_div">
                     <Row justify="space-between" style={{ margin: '4vh' }}>
-                        <Col span={7} style={{ paddingLeft: '2vw', display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>GENDER RATIO</h3>
-                            <EmployeePieChart className='employee_pie_chart' data={received_pie_data} annotation={"Số nhân viên"}></EmployeePieChart>
+                        <Col style={{ paddingLeft: '2vw', width:"30%"}}>
+                            {/* <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>GENDER RATIO</h3> */}
+                            <EmployeePieChart className='employee_pie_chart' data={received_pie_data} annotation={"Số nhân viên"} title={"GENDER RATIO"}></EmployeePieChart>
                         </Col>
-                        <Col span={7} style={{ paddingLeft: '2vw', display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>DEPARTMENT EMPLOYEE</h3>
-                            <SunburstChart className='employee_pie_chart' data={received_sunburst_data}></SunburstChart>
+                        <Col style={{ paddingLeft: '2vw', width:"30%"}}>
+                            {/* <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>DEPARTMENT EMPLOYEE</h3> */}
+                            <SunburstChart className='employee_pie_chart' data={received_sunburst_data} title={"DEPARTMENT EMPLOYEE"}></SunburstChart>
                         </Col>
-                        <Col span={7} style={{ paddingLeft: '2vw', display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE STATUS</h3>
-                            <EmployeePieChart className='employee_pie_chart' data={received_working_status_data} annotation={"Số nhân viên"}></EmployeePieChart>
+                        <Col style={{ paddingLeft: '2vw', width:"30%"}}>
+                            {/* <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE STATUS</h3> */}
+                            <EmployeePieChart className='employee_pie_chart' data={received_working_status_data} annotation={"Số nhân viên"} title={"EMPLOYEE STATUS"}></EmployeePieChart>
                         </Col>
                     </Row>
                     <Row style={{ margin: '4vh', width: "95%"}}>

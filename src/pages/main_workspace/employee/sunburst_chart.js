@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Sunburst } from '@ant-design/plots';
 
-const SunburstChart = ({ data }) => {
+const SunburstChart = ({ data, title }) => {
     if (data != null) {
         const config = {
             data,
@@ -29,7 +29,11 @@ const SunburstChart = ({ data }) => {
             // },
         };
 
-        return <Sunburst {...config} />;
+        
+        return <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignContent: "center"}}>
+        <h3 className="chart_title" style={{ display: 'flex', justifyContent: 'center' }}>{title}</h3> 
+        <Sunburst {...config} />;
+        </div>
     }
     else {
         return <></>;
