@@ -146,7 +146,11 @@ const ViewRegistedEvent = () => {
 
     const handleExport = () => {
         // Convert data to worksheet
-        const worksheet = XLSX.utils.json_to_sheet(searchQuery);
+        const modifiedQuery = searchQuery.map(({ employee_id, event_date, group_name, ...rest }) => ({
+            ...rest,
+            "Đơn vị": group_name,
+          }));
+        const worksheet = XLSX.utils.json_to_sheet(modifiedQuery);
 
         // Create a new workbook and add the worksheet
         const workbook = XLSX.utils.book_new();
