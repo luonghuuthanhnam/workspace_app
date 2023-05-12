@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Pie, measureTextWidth } from '@ant-design/plots';
 
-export default function EmployeePieChart({ data, annotation }) {
+export default function EmployeePieChart({ data, annotation, title }) {
     if (data != null) {
         function renderStatistic(containerWidth, text, style) {
 
@@ -80,7 +80,10 @@ export default function EmployeePieChart({ data, annotation }) {
                 },
             ],
         };
-        return <Pie className='pie_source' {...config} />;
+        return <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignContent: "center"}}>
+            <h3 className="chart_title" style={{ display: 'flex', justifyContent: 'center' }}>{title}</h3>
+            <Pie className='pie_source' {...config} style={{ display: 'flex', justifyContent: 'center' }}/>;
+        </div>
     }
     else {
         return <></>
