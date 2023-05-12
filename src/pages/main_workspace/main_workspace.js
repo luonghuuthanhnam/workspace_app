@@ -112,23 +112,23 @@ function MainWorkSpace() {
     </div>
 
   const siderLogo = collapsed ?
-  <div style={{ width: "100%", display:"flex", justifyContent:"center"}}>
-    <Col style={{width: "100%"}}>
-      <Row style={{width: "100%", display:"flex", justifyContent:"center"}}>
-        <img src="cdvn_logo.jpg" alt="Logo 1" width="60%" />
-      </Row>
-      <Row style={{width: "100%", display:"flex", justifyContent:"center"}}>
-        <img src="khcn_logo.jpg" alt="Logo 2" width="60%"  />
-      </Row>
-    </Col>
-  </div>
+    <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+      <Col style={{ width: "100%" }}>
+        <Row style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <img src="cdvn_logo.jpg" alt="Logo 1" width="60%" />
+        </Row>
+        <Row style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <img src="khcn_logo.jpg" alt="Logo 2" width="60%" />
+        </Row>
+      </Col>
+    </div>
     :
-  <div style={{display:"flex", justifyContent:"center"}}>
-    <Row style={{display:"flex", justifyContent:"center"}}>
-      <img src="cdvn_logo.jpg" alt="Logo 1" width="25%"/>
-      <img src="khcn_logo.jpg" alt="Logo 2" width="25%"/>
-    </Row>
-  </div>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <Row style={{ display: "flex", justifyContent: "center" }}>
+        <img src="cdvn_logo.jpg" alt="Logo 1" width="25%" />
+        <img src="khcn_logo.jpg" alt="Logo 2" width="25%" />
+      </Row>
+    </div>
 
   const items = [
     getItem('Sự kiện', '1', <ScheduleOutlined />, [
@@ -144,7 +144,7 @@ function MainWorkSpace() {
 
   if (isAdmin) {
     items.push(
-      getItem('Admin', '4', <ToolOutlined />, [
+      getItem('Manager', '4', <ToolOutlined />, [
         getItem('Tạo sự kiện', '41', <PlusSquareOutlined />),
         getItem('Danh sách đăng ký', '42', <DownSquareOutlined />),
         getItem('Dashboard', '43', <FundViewOutlined />),
@@ -211,7 +211,7 @@ function MainWorkSpace() {
                     size="large"
                     gap={4}
                   >
-                    {user_name.charAt(0).toUpperCase()}
+                    {user_name ? user_name.charAt(0).toUpperCase() : ""}
                   </Avatar>
                 </Popover>
 
