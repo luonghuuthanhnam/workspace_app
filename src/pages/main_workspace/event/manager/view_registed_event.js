@@ -177,7 +177,7 @@ const ViewRegistedEvent = () => {
     return (
         <div style={{height: "100%", overflowY:"auto", backgroundColor:"#FFFFFF", borderRadius:"1vw", padding:"2%", boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.15)"}} ref={setContainer}>
             <Select
-                placeholder="Select an event"
+                placeholder="Chọn sự kiện"
                 onChange={handleEventSelect}
                 style={{ width: 200 }}
             >
@@ -187,7 +187,7 @@ const ViewRegistedEvent = () => {
             </Select>
             <ArrowRightOutlined style={{ marginLeft: "10px", marginRight: "10px" }} />
             <Select
-                placeholder="Select a table"
+                placeholder="Chọn bảng"
                 onChange={handleTableSelect}
                 style={{ width: 200 }}
                 disabled={!selectedEvent}
@@ -197,14 +197,14 @@ const ViewRegistedEvent = () => {
                     <Option key={table.id} value={table.id}>{table.name}</Option>
                 ))}
             </Select>
-            <Divider orientation='left'>Table Data</Divider>
+            <Divider orientation='left'>Dữ liệu đã đăng ký</Divider>
 
             {selectedEvent && selectedTable && (
                 <>
                     {/* <Affix offsetTop={"13vh"}> */}
                     <Affix target={() => container}>
                         <Select
-                            placeholder="Select Department"
+                            placeholder="Chọn đơn vị"
                             onChange={(value) => handleSearch(value)}
                             style={{ width: 200 }}
                             value={searchText}
@@ -214,12 +214,12 @@ const ViewRegistedEvent = () => {
                             ))}
                         </Select>
                         <Popconfirm placement="topRight"
-                            title="Save?"
-                            description="Save as Excel file?"
+                            title="Tải xuống?"
+                            description="Tải file Excel?"
                             onConfirm={handleExport}
-                            okText="Save"
-                            cancelText="Cancel">
-                            <Button type="primary" icon={<DownloadOutlined />} style={{ marginLeft: "10px" }}>Save</Button>
+                            okText="Tải"
+                            cancelText="Hủy">
+                            <Button type="primary" icon={<DownloadOutlined />} style={{ marginLeft: "10px" }}>Tải</Button>
                         </Popconfirm>
                     </Affix>
                 </>

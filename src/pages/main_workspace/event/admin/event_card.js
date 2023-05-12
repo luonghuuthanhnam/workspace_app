@@ -114,7 +114,7 @@ function EventCardLayoutV2({ userId, event_state }) {
                     ) : (
                         selectedEventData === null ?
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "100%" }}>
-                                <Empty description={<>Select Event</>} />
+                                <Empty description={<>Chọn sự kiện</>} />
                             </div>
                             : (
                                 <>

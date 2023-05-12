@@ -32,12 +32,12 @@ const EventContent = ({ event_data }) => {
                     </Col>
                 </Row>
                 <Row style={{ marginTop: '20px', height: "15vh" }}>
-                    <Divider orientation="left">Event Description</Divider>
+                    <Divider orientation="left">Mô tả sự kiện</Divider>
                     <div style={{ fontSize: 18, color: "#4D4D4D", marginLeft: "2vw" }}>
                         {event_data.description}
                     </div>
                 </Row>
-                <Divider orientation="left">Tables</Divider>
+                <Divider orientation="left">Danh sách bảng</Divider>
                 <Row>
                     <div style={{ width: "100%", marginLeft: "1vw" }}>
                         <EventDataTable event_data={event_data}></EventDataTable>

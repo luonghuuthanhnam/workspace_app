@@ -49,30 +49,30 @@ const EmployeeChart = () => {
                     <Row justify="space-between" style={{ margin: '4vh' }}>
                         <Col style={{ paddingLeft: '2vw', width:"30%"}}>
                             {/* <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>GENDER RATIO</h3> */}
-                            <EmployeePieChart className='employee_pie_chart' data={received_pie_data} annotation={"Số nhân viên"} title={"GENDER RATIO"}></EmployeePieChart>
+                            <EmployeePieChart className='employee_pie_chart' data={received_pie_data} annotation={"Số nhân viên"} title={"TỈ LỆ GIỚI TÍNH"}></EmployeePieChart>
                         </Col>
                         <Col style={{ paddingLeft: '2vw', width:"30%"}}>
                             {/* <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>DEPARTMENT EMPLOYEE</h3> */}
-                            <SunburstChart className='employee_pie_chart' data={received_sunburst_data} title={"DEPARTMENT EMPLOYEE"}></SunburstChart>
+                            <SunburstChart className='employee_pie_chart' data={received_sunburst_data} title={"NHÂN VIÊN TRỰC THUỘC PHÒNG/BAN"}></SunburstChart>
                         </Col>
                         <Col style={{ paddingLeft: '2vw', width:"30%"}}>
                             {/* <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE STATUS</h3> */}
-                            <EmployeePieChart className='employee_pie_chart' data={received_working_status_data} annotation={"Số nhân viên"} title={"EMPLOYEE STATUS"}></EmployeePieChart>
+                            <EmployeePieChart className='employee_pie_chart' data={received_working_status_data} annotation={"Số nhân viên"} title={"SỐ LƯỢNG NHÂN VIÊN ĐANG LÀM - ĐÃ NGHỈ"}></EmployeePieChart>
                         </Col>
                     </Row>
                     <Row style={{ margin: '4vh', width: "95%"}}>
                         <div style={{width:"100%"}}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>ANNUALLY JOINING EMPLOYEE</h3>
+                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>SỐ LƯỢNG NHÂN VIÊN MỚI MỖI NĂM</h3>
                             <JoiningByGenderChart data={received_joining_data}></JoiningByGenderChart>
                         </div>
                     </Row>
                     <Row justify="space-between" style={{ marginTop: '20px', margin: '4vh' }}>
                         <Col span={8}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE HOMETOWN DISTRIBUTION</h3>
+                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>NGUYÊN QUÁN NHÂN VIÊN</h3>
                             <ProvinceDistributionChart data={received_province_data}></ProvinceDistributionChart>
                         </Col>
                         <Col span={16} style={{ paddingLeft: '5vw' }}>
-                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>EMPLOYEE AGE DISTRIBUTION</h3>
+                            <h3 className="chart_title" style={{ display: 'flex', alignItems: 'center' }}>ĐỘ TUỔI NHÂN VIÊN</h3>
                             <AgeDistributionChart data={received_age_data}></AgeDistributionChart>
                         </Col>
                     </Row>

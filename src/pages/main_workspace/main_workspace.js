@@ -130,23 +130,23 @@ function MainWorkSpace() {
   </div>
 
   const items = [
-    getItem('Event', '1', <ScheduleOutlined />, [
-      getItem('Event list', '11', <StarOutlined />)
+    getItem('Sự kiện', '1', <ScheduleOutlined />, [
+      getItem('Danh sách', '11', <StarOutlined />)
     ]
     ),
-    getItem('Employee', '3', <UsergroupAddOutlined />, [
-      getItem('Table', '31', <SolutionOutlined />),
-      getItem('Chart', '32', <FundOutlined />),
+    getItem('Nhân viên', '3', <UsergroupAddOutlined />, [
+      getItem('Bảng', '31', <SolutionOutlined />),
+      getItem('Biểu đồ', '32', <FundOutlined />),
     ]),
   ];
 
 
   if (isAdmin) {
     items.push(
-      getItem('Event - Admin', '4', <ToolOutlined />, [
-        getItem('Create Event', '41', <PlusSquareOutlined />),
-        getItem('View Registed Data', '42', <DownSquareOutlined />),
-        getItem('Event Dashboard', '43', <FundViewOutlined />),
+      getItem('Admin', '4', <ToolOutlined />, [
+        getItem('Tạo sự kiện', '41', <PlusSquareOutlined />),
+        getItem('Danh sách đăng ký', '42', <DownSquareOutlined />),
+        getItem('Dashboard', '43', <FundViewOutlined />),
       ])
     );
     // items.push(
@@ -200,7 +200,7 @@ function MainWorkSpace() {
               <h3 style={{ marginLeft: "0.8vw", color: "#FFFFFF" }}>WORKSPACE ON CLOUD</h3>
               <div style={{ width: "10%", display: "flex", justifyContent: "end", alignItems: "center", marginRight: "1vw" }}>
 
-                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Log out</Button>
+                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Đăng xuất</Button>
                 <Popover content={"trung tam 1"} title={'Trung tâm 1'} placement="right">
                   <Avatar
                     style={{

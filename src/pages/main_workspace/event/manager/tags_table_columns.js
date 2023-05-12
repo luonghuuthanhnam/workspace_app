@@ -43,7 +43,7 @@ const TagColumn = (props) => {
             if (inputValue !== "") {
                 Modal.error({
                     title: 'Error',
-                    content: `Column "${inputValue}" already exists! Please try again!`,
+                    content: `Cột "${inputValue}" đã tồn tại!`,
                 });
             }
         }
@@ -63,7 +63,7 @@ const TagColumn = (props) => {
             if (inputValue !=="") {
                 Modal.error({
                     title: 'Error',
-                    content: `Column "${inputValue}" already exists! Please try again!`,
+                    content: `Cột "${inputValue}" đã tồn tại!`,
                 });
             }
         }
@@ -144,7 +144,7 @@ const TagColumn = (props) => {
                 />
             ) : (
                 <Tag style={tagPlusStyle} onClick={showInput}>
-                    <PlusOutlined /> New Column
+                    <PlusOutlined /> Thêm cột
                 </Tag>
             )}
         </Space>

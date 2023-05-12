@@ -543,7 +543,7 @@ const EditableTable = ({ emp_data }) => {
                 Add Column
             </Button>
             <Modal
-                title="Enter the name of the new column"
+                title="Thêm tên cho cột mới"
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
@@ -556,7 +556,7 @@ const EditableTable = ({ emp_data }) => {
             </Modal>
 
             <Button type="dashed" onClick={showDeleteModal} style={{ marginLeft: "20px", color: "red" }}>
-                Delete Column
+                Xóa cột
             </Button>
             <Modal
                 title="Select column to delete"
@@ -575,7 +575,7 @@ const EditableTable = ({ emp_data }) => {
                     <div>
 
                         <Button onClick={addRow} style={{ marginLeft: "20px" }}>
-                            Add Row
+                            Thêm hàng
                         </Button>
                         <Popconfirm
                             title="Save this data?"
@@ -583,19 +583,19 @@ const EditableTable = ({ emp_data }) => {
                             onConfirm={() => handleSaveTable()}
                         >
                             <Button type="primary" style={{ marginLeft: "20px" }} disabled={!isDataSourceModified}>
-                                Save
+                                Lưu
                             </Button>
                         </Popconfirm>
                         <Popover content={advance_content} title="Advance" trigger="click" placement="left">
                             <Button type="dashed" style={{ marginLeft: "20px" }}>
-                                Advance
+                                Nâng cao
                             </Button>
                         </Popover>
                     </div>
                 </Affix>
             </div>
             <Input.Search
-                placeholder="Search employee"
+                placeholder="Tìm kiếm theo tên"
                 style={{ width: 300, marginLeft: "10px" }}
                 onChange={handleSearch}
             />

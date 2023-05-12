@@ -51,10 +51,10 @@ function LoginPage({ onLogin }) {
     <div>
       <Row justify="space-between" style={{ marginTop: '20px' }}>
         <Col span={12}></Col>
-        <Col span={12}>
+        {/* <Col span={12}>
           <span style={{ marginRight: '20px' }}>Language Option</span>
           <span>Contact Information</span>
-        </Col>
+        </Col> */}
       </Row>
       <Row>
         <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "80vh" }}>
@@ -69,8 +69,8 @@ function LoginPage({ onLogin }) {
             <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} onPressEnter={handleLogin}/>
             {/* <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>Login</Button> */}
             <Spin spinning={loading}> {/* Wrap the login button with Spin component */}
-              <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8"}} onClick={handleLogin}>Login</Button>
-              <Button>Sign Up</Button>
+              <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8"}} onClick={handleLogin}>ĐĂNG NHẬP</Button>
+              {/* <Button>Sign Up</Button> */}
             </Spin>
           </div>
         </Col>
