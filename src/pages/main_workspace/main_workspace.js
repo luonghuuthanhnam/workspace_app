@@ -106,7 +106,7 @@ function MainWorkSpace() {
       }}
     >
       <h4>
-        WORKSPACE
+        WORKSPACE DEV
       </h4>
     </div>
 
