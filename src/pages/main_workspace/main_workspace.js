@@ -31,6 +31,7 @@ function MainWorkSpace() {
   const navigate = useNavigate();
   const userId = localStorage.getItem('userID');
   const group_id = localStorage.getItem('group_id');
+  const user_name = localStorage.getItem('user_name');
   const adminIds = ["19031998", "12345678", "87654321"];
   const isAdmin = adminIds.includes(userId);
 
@@ -201,7 +202,7 @@ function MainWorkSpace() {
               <div style={{ width: "10%", display: "flex", justifyContent: "end", alignItems: "center", marginRight: "1vw" }}>
 
                 <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Đăng xuất</Button>
-                <Popover content={"trung tam 1"} title={'Trung tâm 1'} placement="right">
+                <Popover content={user_name} title={'Xin chào'} placement="right">
                   <Avatar
                     style={{
                       backgroundColor: '#f56a00',
@@ -210,7 +211,7 @@ function MainWorkSpace() {
                     size="large"
                     gap={4}
                   >
-                    TT1
+                    {user_name.charAt(0).toUpperCase()}
                   </Avatar>
                 </Popover>
 
