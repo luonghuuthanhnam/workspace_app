@@ -24,26 +24,28 @@ function CardList({ userId, event_state, onCardClick }) {
             .then((response) => response.json())
             .then((data) => {
                 if (data.event_id) {
-                    const eventIds = Object.values(data.event_id);  // Convert object to array
+                    const eventIds = Object.values(data.event_id);
                     const newEvents = eventIds.map((event_id, index) => {
-                        let e_data = data.event_data[index]
+                        let e_data = data.event_data[index];
                         if (typeof e_data === 'string') {
                             e_data = JSON.parse(e_data.replace(/'/g, '"'));
                         }
                         return {
                             id: event_id,
-                            title: data.event_title[index], // Use event_id as key to get title
-                            created_at: data.created_at[index], // Use event_id as key to get created_at
-                            created_by: data.created_by[index], // Use event_id as key to get created_by
-                            from_date: e_data.dates[0].split("T")[0], // Access dates property
-                            to_date: e_data.dates[1].split("T")[0], // Access dates property
-                            description: e_data.description || '', // Use e_data.description if it exists, or empty string otherwise
-                            tables: e_data.tables_data || [], // Use e_data.tables_data if it exists, or empty array otherwise
+                            title: data.event_title[index],
+                            created_at: data.created_at[index],
+                            created_by: data.created_by[index],
+                            from_date: e_data.dates[0].split("T")[0],
+                            to_date: e_data.dates[1].split("T")[0],
+                            description: e_data.description || '',
+                            tables: e_data.tables_data || [],
                         };
                     });
+                    // Sort the events by from_date in descending order
+                    newEvents.sort((a, b) => b.created_at.replace("-","").localeCompare(a.created_at.replace("-","")));
                     setEvents(newEvents);
                 } else {
-                    console.log("error")
+                    console.log("error");
                 }
                 setLoading(false);
             })
