@@ -171,8 +171,11 @@ function MainWorkSpace() {
           <Sider
             style={{
               backgroundColor: '#FFFFFF',
-              height: "100%",
+              minHeight: '100vh',
+              height: "auto",
             }}
+            width= {"20vw"}
+            collapsedWidth={"10vw"}
             collapsible
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
@@ -245,7 +248,8 @@ function MainWorkSpace() {
                 padding: 15,
                 height: "92%",
                 // height: "80vh",
-                width: "100%",
+                // width: "100%",
+                width: "auto",
                 // height: ,
                 // background: colorBgContainer,
                 background: "#F5F5F5"
