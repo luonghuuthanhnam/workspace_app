@@ -19,7 +19,33 @@ const EventDataTable = ({ event_data }) => {
 
   let emp_code = JSON.parse(localStorage.getItem('emp_code'));
 
-  const options = emp_code.map((emp) => ({ label: <><Tag>{emp["hovaten"]}</Tag> <Tag>{emp["ngaysinh"]}</Tag></>, value: emp["employee_id"] }));
+  // const options = emp_code.map((emp) => ({ label: <><Tag>{emp["hovaten"]}</Tag> <Tag>{emp["ngaysinh"]}</Tag></>, value: emp["employee_id"] }));
+  const options = emp_code.map((emp) => ({
+    label: (
+      <>
+        <Tag>{emp["hovaten"]}</Tag>
+        <Tag>{emp["ngaysinh"]}</Tag>
+      </>
+    ),
+    value: emp["employee_id"],
+  }));
+
+  const selectFilterOption = (inputValue, option) => {
+    // Filter based on the 'hovaten' field only
+    return option.label.props.children[0].props.children.toLowerCase().includes(inputValue.toLowerCase());
+  };
+
+  //   const filteredOptions = emp_code.filter((emp) =>
+  //   emp.hovaten.toLowerCase().includes(searchValue.toLowerCase())
+  // );
+  //   const options = filteredOptions.map((emp) => (
+  //     <Option label={emp.employee_id} value={emp.employee_id}>
+  //       <div>
+  //         <Tag>{emp.hovaten}</Tag>
+  //         <Tag>{emp.ngaysinh}</Tag>
+  //       </div>
+  //     </Option>
+  //   ));
 
   useEffect(() => {
     fetch(`${baseURL}/event/query_registed_data`, {
@@ -184,7 +210,7 @@ const EventDataTable = ({ event_data }) => {
       const fieldProps = isNameField(field) ? { style: { fontWeight: 'bold' } } : {};
       const selectProps = isNameField(field) ? { showSearch: true, options: emp_code } : {};
       const FieldComponent = isNameField(field) ? (
-        <Select {...selectProps} options={options} onChange={onEmployeeOptionChange} />
+        <Select {...selectProps} options={options} onChange={onEmployeeOptionChange} filterOption={selectFilterOption} />
       ) : (
         <Input />
       );

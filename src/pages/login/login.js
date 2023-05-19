@@ -51,7 +51,7 @@ function LoginPage({ onLogin }) {
   return (
     <div>
       <Row justify="space-between" style={{ marginTop: '20px' }}>
-        <Col span={12}></Col>
+        {/* <Col span={12}></Col> */}
         {/* <Col span={12}>
           <span style={{ marginRight: '20px' }}>Language Option</span>
           <span>Contact Information</span>
