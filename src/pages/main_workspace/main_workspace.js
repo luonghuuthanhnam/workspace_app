@@ -167,12 +167,13 @@ function MainWorkSpace() {
       }}
     >
       <Layout style={{ height: '100vh' }}>
-        <Affix offsetTop={10}>
+        <Affix offsetTop={0}>
           <Sider
             style={{
               backgroundColor: '#FFFFFF',
               minHeight: '100vh',
               height: "auto",
+              paddingTop: "2vh",
             }}
             width={"15vw"}
             collapsedWidth={"4vw"}
@@ -227,7 +228,7 @@ function MainWorkSpace() {
               // maxHeight: "150vh",
             }}
           >
-            <Breadcrumb style={{ margin: '1vh 0' }}>
+            <Breadcrumb style={{ margin:" 5px 0.5vw"}}>
               {items
                 .filter((item) => item.key === selectedMenuItem || item.children?.some((child) => child.key === selectedMenuItem))
                 .map((item) => {
@@ -245,7 +246,8 @@ function MainWorkSpace() {
             </Breadcrumb>
             <div
               style={{
-                padding: 15,
+                marginLeft:"0.5vw",
+                // padding: 15,
                 height: "92%",
                 // height: "80vh",
                 // width: "100%",
