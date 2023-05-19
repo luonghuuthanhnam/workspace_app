@@ -174,8 +174,8 @@ function MainWorkSpace() {
               minHeight: '100vh',
               height: "auto",
             }}
-            width= {"20vw"}
-            collapsedWidth={"10vw"}
+            width={"15vw"}
+            collapsedWidth={"4vw"}
             collapsible
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
@@ -196,28 +196,28 @@ function MainWorkSpace() {
           <Header
             style={{
               padding: 0,
-              height: "5%",
+              height: "auto",
               background: '#A3D2CA',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "100%" }}>
-              <h3 style={{ marginLeft: "0.8vw", color: "#FFFFFF" }}>WORKSPACE ON CLOUD</h3>
-              <div style={{ width: "10%", display: "flex", justifyContent: "end", alignItems: "center", marginRight: "1vw" }}>
-
-                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Đăng xuất</Button>
-                <Popover content={user_name} title={'Xin chào'} placement="right">
-                  <Avatar
-                    style={{
-                      backgroundColor: '#f56a00',
-                      verticalAlign: 'middle',
-                    }}
-                    size="large"
-                    gap={4}
-                  >
-                    {user_name ? user_name.charAt(0).toUpperCase() : ""}
-                  </Avatar>
-                </Popover>
-
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "8vh", width: "100%" }}>
+              <div style={{ marginLeft: "0.8vw", color: "#FFFFFF", fontWeight: "bold" }}>WORKSPACE ON CLOUD</div>
+              <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "1vw" }}>
+                <Affix offsetTop={0}>
+                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "auto" }} onClick={handleLogout}>Đăng xuất</Button>
+                  <Popover content={user_name} title={'Xin chào'} placement="right">
+                    <Avatar
+                      style={{
+                        backgroundColor: '#f56a00',
+                        verticalAlign: 'middle',
+                      }}
+                      size="default"
+                      gap={0}
+                    >
+                      {user_name ? user_name.charAt(0).toUpperCase() : ""}
+                    </Avatar>
+                  </Popover>
+                </Affix>
               </div>
             </div>
           </Header>
