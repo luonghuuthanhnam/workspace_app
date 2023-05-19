@@ -43,26 +43,28 @@ export default function EmployeePieChart({ data, annotation, title }) {
             },
             statistic: {
                 title: {
-                    offsetY: -4,
-                    customHtml: (container, view, datum) => {
-                        const { width, height } = container.getBoundingClientRect();
-                        const d = Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2));
-                        const text = datum ? datum.type : `${annotation}`;
-                        return renderStatistic(d, text, {
-                            fontSize: 28,
-                        });
+                    style: {
+                        fontSize: '1vw',
                     },
+                    offsetY: -10,
+                    
+                    // customHtml: (container, view, datum) => {
+                    //     const { width, height } = container.getBoundingClientRect();
+                    //     const d = Math.sqrt(Math.pow(width / 2, 2) + Math.pow(height / 2, 2));
+                    //     const text = datum ? datum.type : `${annotation}`;
+                    //     return renderStatistic(d, text);
+                    // },
                 },
                 content: {
                     offsetY: 4,
                     style: {
-                        fontSize: '32px',
+                        fontSize: '1.5vw',
                     },
                     customHtml: (container, view, datum, data) => {
                         const { width } = container.getBoundingClientRect();
                         const text = datum ? `${datum.value}` : `${data.reduce((r, d) => r + d.value, 0)}`;
                         return renderStatistic(width, text, {
-                            fontSize: 32,
+                            // fontSize: "0.2vw",
                         });
                     },
                 },

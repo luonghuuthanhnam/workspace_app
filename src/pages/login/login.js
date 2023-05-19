@@ -1,5 +1,5 @@
 import { width } from '@mui/system';
-import { Row, Col, Input, Button, Spin, message} from 'antd';
+import { Row, Col, Input, Button, Spin, message } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { baseURL } from '../../config';
@@ -11,6 +11,7 @@ function LoginPage({ onLogin }) {
   const [userId, setUserId] = React.useState(null);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [loading, setLoading] = React.useState(false); // Add loading state
+  const [isPortrait, setIsPortrait] = React.useState(window.innerHeight > window.innerWidth);
 
   const handleLogin = () => {
     setLoading(true); // Set loading state to true before making API call
@@ -50,36 +51,38 @@ function LoginPage({ onLogin }) {
   return (
     <div>
       <Row justify="space-between" style={{ marginTop: '20px' }}>
-        <Col span={12}></Col>
+        {/* <Col span={12}></Col> */}
         {/* <Col span={12}>
           <span style={{ marginRight: '20px' }}>Language Option</span>
           <span>Contact Information</span>
         </Col> */}
       </Row>
       <Row>
-        <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "80vh" }}>
-          <div style={{ width: '40vw', textAlign: 'center' }}>
-            <img src="../images/cover_bgr.png" style={{ width: '35vw', marginBottom: '20px', marginLeft: '10vw' }} />
-          </div>
-        </Col>
-        <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: "80vh" }}>
+        {!isPortrait && (
+          <Col span={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>
+            <div style={{ width: '40vw', textAlign: 'center' }}>
+              <img src="../images/cover_bgr.png" style={{ width: '35vw', marginBottom: '20px', marginLeft: '10vw' }} alt="Cover Image" />
+            </div>
+          </Col>
+        )}
+        <Col span={!isPortrait ? 12 : 24} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '80vh' }}>
           <div style={{ maxWidth: '400px', textAlign: 'center' }}>
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent:"space-evenly",
+                justifyContent: "space-evenly",
                 marginBottom: "3vh"
               }}
             >
-            <img src="cdvn_logo.jpg" alt="Logo" style={{ width: '7vw', marginBottom: '20px' }} />
-            <img src="khcn_logo.jpg" alt="Logo" style={{ width: '7vw', marginBottom: '20px'}} />
+              <img src="cdvn_logo.jpg" alt="Logo" style={{ width: '7vw', marginBottom: '20px' }} />
+              <img src="khcn_logo.jpg" alt="Logo" style={{ width: '7vw', marginBottom: '20px' }} />
             </div>
             <Input placeholder="Email" style={{ marginBottom: '10px' }} value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} onPressEnter={handleLogin}/>
+            <Input.Password placeholder="Password" style={{ marginBottom: '20px' }} value={password} onChange={(e) => setPassword(e.target.value)} onPressEnter={handleLogin} />
             {/* <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>Login</Button> */}
             <Spin spinning={loading}> {/* Wrap the login button with Spin component */}
-              <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8"}} onClick={handleLogin}>ĐĂNG NHẬP</Button>
+              <Button type="primary" style={{ marginRight: '10px', backgroundColor: "#5EAAA8" }} onClick={handleLogin}>ĐĂNG NHẬP</Button>
               {/* <Button>Sign Up</Button> */}
             </Spin>
           </div>

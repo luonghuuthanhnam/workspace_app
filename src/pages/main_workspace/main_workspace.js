@@ -167,12 +167,16 @@ function MainWorkSpace() {
       }}
     >
       <Layout style={{ height: '100vh' }}>
-        <Affix offsetTop={10}>
+        <Affix offsetTop={0}>
           <Sider
             style={{
               backgroundColor: '#FFFFFF',
-              height: "100%",
+              minHeight: '100vh',
+              height: "auto",
+              paddingTop: "2vh",
             }}
+            width={"15vw"}
+            collapsedWidth={"4vw"}
             collapsible
             collapsed={collapsed}
             onCollapse={(value) => setCollapsed(value)}
@@ -193,28 +197,28 @@ function MainWorkSpace() {
           <Header
             style={{
               padding: 0,
-              height: "5%",
+              height: "auto",
               background: '#A3D2CA',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "100%" }}>
-              <h3 style={{ marginLeft: "0.8vw", color: "#FFFFFF" }}>WORKSPACE ON CLOUD</h3>
-              <div style={{ width: "10%", display: "flex", justifyContent: "end", alignItems: "center", marginRight: "1vw" }}>
-
-                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "85%" }} onClick={handleLogout}>Đăng xuất</Button>
-                <Popover content={user_name} title={'Xin chào'} placement="right">
-                  <Avatar
-                    style={{
-                      backgroundColor: '#f56a00',
-                      verticalAlign: 'middle',
-                    }}
-                    size="large"
-                    gap={4}
-                  >
-                    {user_name ? user_name.charAt(0).toUpperCase() : ""}
-                  </Avatar>
-                </Popover>
-
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: "8vh", width: "100%" }}>
+              <div style={{ marginLeft: "0.8vw", color: "#FFFFFF", fontWeight: "bold" }}>WORKSPACE ON CLOUD</div>
+              <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "1vw" }}>
+                <Affix offsetTop={0}>
+                <Button style={{ marginRight: '10px', backgroundColor: "#E96767", color: "#FFFFFF", height: "auto" }} onClick={handleLogout}>Đăng xuất</Button>
+                  <Popover content={user_name} title={'Xin chào'} placement="right">
+                    <Avatar
+                      style={{
+                        backgroundColor: '#f56a00',
+                        verticalAlign: 'middle',
+                      }}
+                      size="default"
+                      gap={0}
+                    >
+                      {user_name ? user_name.charAt(0).toUpperCase() : ""}
+                    </Avatar>
+                  </Popover>
+                </Affix>
               </div>
             </div>
           </Header>
@@ -224,7 +228,7 @@ function MainWorkSpace() {
               // maxHeight: "150vh",
             }}
           >
-            <Breadcrumb style={{ margin: '1vh 0' }}>
+            <Breadcrumb style={{ margin:" 5px 0.5vw"}}>
               {items
                 .filter((item) => item.key === selectedMenuItem || item.children?.some((child) => child.key === selectedMenuItem))
                 .map((item) => {
@@ -242,10 +246,12 @@ function MainWorkSpace() {
             </Breadcrumb>
             <div
               style={{
-                padding: 15,
+                marginLeft:"0.5vw",
+                // padding: 15,
                 height: "92%",
                 // height: "80vh",
-                width: "100%",
+                // width: "100%",
+                width: "auto",
                 // height: ,
                 // background: colorBgContainer,
                 background: "#F5F5F5"
