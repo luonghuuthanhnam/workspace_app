@@ -28,7 +28,7 @@ function CardList({ userId, event_state, onCardClick }) {
                     const newEvents = eventIds.map((event_id, index) => {
                         let e_data = data.event_data[index];
                         if (typeof e_data === 'string') {
-                            e_data = JSON.parse(e_data.replace(/'/g, '"'));
+                            e_data = JSON.parse(e_data);
                         }
                         return {
                             id: event_id,
